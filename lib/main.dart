@@ -40,13 +40,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<CocktailListState> _mKey = GlobalKey();
-
-  List<CocktailEntity> drinks = [];
-
-  //List<CocktailEntity> filteredCocktails = [];
-
-  CocktailList? listWidget;
-
+  final List<CocktailEntity> drinks = [];
   final TextEditingController textController = TextEditingController();
 
   @override
@@ -117,93 +111,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
-  /*
-  void fetchLegacy() async {
-    Response response = await dio.get(
-        'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=$search');
-    //response = await dio.get('http://192.168.178.36:8080/cocktails');
-
-    //print('Fetching');
-    //print(response.data);
-
-    // Ioan's APIs
-    for (dynamic e in response.data) {
-      List<String?> ingredients = [
-        e['strIngredient1'],
-        e['strIngredient2'],
-        e['strIngredient3'],
-        e['strIngredient4'],
-        e['strIngredient5'],
-        e['strIngredient6'],
-        e['strIngredient7'],
-        e['strIngredient8'],
-        e['strIngredient9'],
-        e['strIngredient10'],
-        e['strIngredient11'],
-        e['strIngredient12'],
-        e['strIngredient13'],
-        e['strIngredient14'],
-        e['strIngredient15']
-      ];
-      List<String?> measures = [
-        e['strMeasure1'],
-        e['strMeasure2'],
-        e['strMeasure3'],
-        e['strMeasure4'],
-        e['strMeasure5'],
-        e['strMeasure6'],
-        e['strMeasure7'],
-        e['strMeasure8'],
-        e['strMeasure9'],
-        e['strMeasure10'],
-        e['strMeasure11'],
-        e['strMeasure12'],
-        e['strMeasure13'],
-        e['strMeasure14'],
-        e['strMeasure15']
-      ];
-
-      List<Ingredient> createIngredients(
-        List<String> ingredients,
-        List<String> measures,
-      ) {
-        if (ingredients.length == measures.length) {
-          return List.generate(
-            ingredients.length,
-            (index) => Ingredient(
-              ingredients[index],
-              measures[index],
-            ),
-          );
-        }
-        return [];
-      }
-
-      cocktails.add(
-        CocktailEntity(
-          id: e['id'],
-          modifyDate: e['dateModified'],
-          name: e['strDrink'],
-          instructions: e['strInstructions'],
-          category: e['strCategory'],
-          isAlcoholic: e['strAlcoholic'] == 'Alcoholic' ? true : false,
-          imageUrl: e['strDrinkThumb'],
-          ingredients: createIngredients(
-            ingredients.whereType<String>().toList(),
-            measures.whereType<String>().toList(),
-          ),
-        ),
-      );
-
-      setState(() {
-        listWidget = CocktailList(cocktails);
-      });
-    }
-
-    //print('Fetched ${cocktails.length} cocktails');
-  }
-  */
 
   void fetch() async {
     // Make an API call to get all drinks

@@ -18,16 +18,6 @@ class AddCocktailDialog extends StatefulWidget {
 class _AddCocktailDialogState extends State<AddCocktailDialog> {
   _AddCocktailDialogState(this.addFunction, this.listLength);
 
-  /*CocktailEntity cocktailEntity = CocktailEntity(
-    id: 0,
-    name: '',
-    instructions: '',
-    category: '',
-    isAlcoholic: false,
-    ingredients: [Ingredient('name', 'measure')],
-    imageUrl: '',
-  );*/
-
   AddFunction addFunction;
   int listLength;
 
