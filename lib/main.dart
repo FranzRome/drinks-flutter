@@ -47,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   CocktailList? listWidget;
 
-  String search = '';
+  final TextEditingController textController = TextEditingController();
 
   @override
   void initState() {
@@ -81,14 +81,14 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-  
+
   Widget searchBar() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
       child: Material(
         elevation: 4,
         child: TextField(
-          controller: TextEditingController(text: search),
+          controller: textController,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
             labelText: 'Search',
@@ -99,17 +99,15 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               onPressed: () {
                 setState(() {
-                  search = '';
-                  _mKey.currentState?.filterCocktails(filter: search);
-
+                  textController.clear();
+                  _mKey.currentState?.filterCocktails(filter: textController.text);
                 });
               },
             ),
           ),
           onChanged: (value) => {
             setState(() {
-              search = value;
-              _mKey.currentState?.filterCocktails(filter: search);
+              _mKey.currentState?.filterCocktails(filter: textController.text);
               //filteredCocktails = _filterList(cocktails, search);
               //fetch();
             })
