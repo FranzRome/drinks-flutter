@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cocktails/entities/cocktail_entity.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 
 class Api {
   static late Dio _dio;
@@ -23,5 +24,12 @@ class Api {
 
   static Future<Response> addDrink(CocktailEntity cocktail) async {
     return await _dio.post('api/drink', data: jsonEncode(cocktail));
+  }
+
+  static Future<List<dynamic>> loadMockup() async {
+    List<dynamic> result = json.decode(
+        await rootBundle.loadString('assets/json/drinks.json'))['drinks'];
+
+    return result;
   }
 }

@@ -235,6 +235,10 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     } on Exception catch (e) {
       _showError(e.toString());
+
+      for(dynamic e in await Api.loadMockup()){
+        drinks.add(CocktailEntity.fromJsonMockup(e));
+      }
     }
   }
 

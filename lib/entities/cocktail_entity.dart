@@ -20,10 +20,10 @@ class CocktailEntity {
   });
 
   CocktailEntity.fromJsonMockup(Map<String, dynamic> json)
-      : id = json['idDrink'],
-        modifyDate = json['dateModified'],
+      : id = int.parse(json['idDrink']),
+        modifyDate = DateTime.parse(json['dateModified'] ?? '2000-01-01 00:00:00'),
         name = json['strDrink'],
-        instructions = json['strInsructions'],
+        instructions = json['strInstructions'],
         category = json['strCategory'],
         isAlcoholic = json['strAlcoholic'] == 'Alcoholic' ? true : false,
         ingredients = [],
