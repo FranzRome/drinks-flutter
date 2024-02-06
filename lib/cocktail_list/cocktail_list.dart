@@ -27,21 +27,15 @@ class CocktailListState extends State<CocktailList> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
       child: filteredCocktails.isEmpty
-          /*? ListView.builder(
-              itemCount: cocktails.length,
-              itemBuilder: (context, index) {
-                return CocktailListTile(cocktails[index]);
-              })
-          : */
           ? const Center(
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 38),
-                child: Text(
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 38),
+              child: Text(
                 'Type in the search bar to look for some cocktails',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                            ),
-              ))
+              ),
+            ))
           : ListView.builder(
               itemCount: filteredCocktails.length,
               itemBuilder: (context, index) {
@@ -52,6 +46,7 @@ class CocktailListState extends State<CocktailList> {
 
   void filterCocktails({String filter = ''}) {
     setState(() {
+      if (filter == '') return filteredCocktails.clear();
       filteredCocktails = cocktails
           .where((element) =>
               element.name.toLowerCase().contains(filter.toLowerCase()))
