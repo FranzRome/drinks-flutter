@@ -42,66 +42,60 @@ class _AddCocktailDialogState extends State<AddCocktailDialog> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom), // Prevent keyboard to go over the widget
+      padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context)
+              .viewInsets
+              .bottom), // Prevent keyboard to go over the widget
       child: SingleChildScrollView(
         child: IntrinsicHeight(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal:18, vertical: 0),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 0),
             child: Column(
               children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                  child: TextField(
-                    obscureText: false,
-                    decoration: const InputDecoration(
+                const SizedBox(height: 18),
+                TextField(
+                  obscureText: false,
+                  decoration: const InputDecoration(
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    border: OutlineInputBorder(),
+                    labelText: 'Name',
+                  ),
+                  onChanged: (value) => {name = value},
+                ),
+                const SizedBox(height: 18),
+                TextField(
+                  obscureText: false,
+                  decoration: const InputDecoration(
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    border: OutlineInputBorder(),
+                    labelText: 'Category',
+                  ),
+                  onChanged: (value) => {category = value},
+                ),
+                const SizedBox(height: 18),
+                TextField(
+                  maxLines: 3,
+                  obscureText: false,
+                  decoration: const InputDecoration(
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       border: OutlineInputBorder(),
-                      labelText: 'Name',
-                    ),
-                    onChanged: (value) => {name = value},
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                  child: TextField(
-                    obscureText: false,
-                    decoration: const InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      border: OutlineInputBorder(),
-                      labelText: 'Category',
-                    ),
-                    onChanged: (value) => {category = value},
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                  child: TextField(
-                    maxLines: 3,
-                    obscureText: false,
-                    decoration: const InputDecoration(
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        border: OutlineInputBorder(),
-                        labelText: 'Instructions',
-                        labelStyle: TextStyle()),
-                    onChanged: (value) => {instructions = value},
-                  ),
+                      labelText: 'Instructions',
+                      labelStyle: TextStyle()),
+                  onChanged: (value) => {instructions = value},
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 180),
                   child: CheckboxListTile(
                       value: isAlcoholic,
-                      title: const Text('Alcoholic',),
+                      title: const Text(
+                        'Alcoholic',
+                      ),
                       onChanged: (bool? value) => {
                             setState(() {
                               isAlcoholic = !isAlcoholic;
                             })
                           }),
                 ),
-                const Spacer(),
                 ingredientsInputs(),
                 TextButton(
                   onPressed: () {
@@ -113,19 +107,24 @@ class _AddCocktailDialogState extends State<AddCocktailDialog> {
                   },
                   child: const Text('Add Ingredient'),
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                  child: TextField(
-                    obscureText: false,
-                    decoration: const InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      border: OutlineInputBorder(),
-                      labelText: 'Image URL',
-                    ),
-                    onChanged: (value) => {imageUrl = value},
+                const SizedBox(height: 18),
+                TextField(
+                  obscureText: false,
+                  decoration: const InputDecoration(
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    border: OutlineInputBorder(),
+                    labelText: 'Image URL',
                   ),
+                  onChanged: (value) => {imageUrl = value},
                 ),
+                const SizedBox(height: 18),
+                ElevatedButton(
+                  onPressed: () {
+                    submit();
+                  },
+                  child: const Text('Confirm'),
+                ),
+                const SizedBox(height: 12),
               ],
             ),
           ),
