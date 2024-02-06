@@ -19,6 +19,16 @@ class CocktailEntity {
     required this.imageUrl,
   });
 
+  CocktailEntity.fromJsonMockup(Map<String, dynamic> json)
+      : id = json['idDrink'],
+        modifyDate = json['dateModified'],
+        name = json['strDrink'],
+        instructions = json['strInsructions'],
+        category = json['strCategory'],
+        isAlcoholic = json['strAlcoholic'] == 'Alcoholic' ? true : false,
+        ingredients = [],
+        imageUrl = json['strDrinkThumb'];
+
   Map<String, dynamic> toJson() => {
         'id': id,
         'idDrink': '',
