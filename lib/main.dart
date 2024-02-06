@@ -65,41 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-              child: Material(
-                elevation: 4,
-                child: TextField(
-                  controller: TextEditingController(text: search),
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    labelText: 'Search',
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.close),
-                      style: ElevatedButton.styleFrom(
-                        splashFactory: NoSplash.splashFactory,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          search = '';
-                          _mKey.currentState?.filterCocktails(filter: search);
-
-                        });
-                      },
-                    ),
-                  ),
-                  onChanged: (value) => {
-                    setState(() {
-                      search = value;
-                      _mKey.currentState?.filterCocktails(filter: search);
-                      //filteredCocktails = _filterList(cocktails, search);
-                      //fetch();
-                    })
-                  },
-                  //controller: TextEditingController(text: search),
-                ),
-              ),
-            ),
+            searchBar(),
             /*Text('Drinks count:${cocktails.length}  '
                 'Search:$search'),*/
             Expanded(
@@ -113,6 +79,44 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Add Cocktail',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+  
+  Widget searchBar() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+      child: Material(
+        elevation: 4,
+        child: TextField(
+          controller: TextEditingController(text: search),
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            labelText: 'Search',
+            suffixIcon: IconButton(
+              icon: const Icon(Icons.close),
+              style: ElevatedButton.styleFrom(
+                splashFactory: NoSplash.splashFactory,
+              ),
+              onPressed: () {
+                setState(() {
+                  search = '';
+                  _mKey.currentState?.filterCocktails(filter: search);
+
+                });
+              },
+            ),
+          ),
+          onChanged: (value) => {
+            setState(() {
+              search = value;
+              _mKey.currentState?.filterCocktails(filter: search);
+              //filteredCocktails = _filterList(cocktails, search);
+              //fetch();
+            })
+          },
+          //controller: TextEditingController(text: search),
+        ),
+      ),
     );
   }
 
