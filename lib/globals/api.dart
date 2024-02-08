@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cocktails/entities/cocktail_entity.dart';
+import 'package:cocktails/entities/drink_entity.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 
@@ -22,8 +22,8 @@ class Api {
     return await _dio.get('api/drink/getall');
   }
 
-  static Future<Response> addDrink(CocktailEntity cocktail) async {
-    return await _dio.post('api/drink', data: jsonEncode(cocktail));
+  static Future<Response> addDrink(DrinkEntity cocktail) async {
+    return await _dio.post('api/drink', data: cocktail.toJson());
   }
 
   static Future<List<dynamic>> loadMockup() async {

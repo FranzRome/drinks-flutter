@@ -1,33 +1,59 @@
-class CocktailEntity {
+import 'dart:convert';
+
+import 'package:cocktails/globals/local_data.dart';
+
+class DrinkEntity {
   final int id;
-  final DateTime modifyDate;
+
+  //final DateTime modifyDate;
   final String name;
   final String instructions;
   final String category;
   final bool isAlcoholic;
   final List<Ingredient> ingredients;
   final String imageUrl;
+  bool isFavorite;
 
-  const CocktailEntity({
+  DrinkEntity({
     required this.id,
-    required this.modifyDate,
+    //required this.modifyDate,
     required this.name,
     required this.instructions,
     required this.category,
     required this.isAlcoholic,
     required this.ingredients,
     required this.imageUrl,
+    required this.isFavorite,
   });
 
-  CocktailEntity.fromJsonMockup(Map<String, dynamic> json)
-      : id = int.parse(json['idDrink']),
-        modifyDate = DateTime.parse(json['dateModified'] ?? '2000-01-01 00:00:00'),
-        name = json['strDrink'],
-        instructions = json['strInstructions'],
-        category = json['strCategory'],
-        isAlcoholic = json['strAlcoholic'] == 'Alcoholic' ? true : false,
-        ingredients = [],
-        imageUrl = json['strDrinkThumb'];
+  static Future<DrinkEntity> fromJsonApi(Map<String, dynamic> json) async {
+    return DrinkEntity(
+      id: json['id'],
+      //modifyDate = DateTime.parse(json['dateModified'] ?? '2000-01-01 00:00:00'),
+      name: json['name'],
+      instructions: '',
+      category: json['category'],
+      //isAlcoholic: json['strAlcoholic'] == 'Alcoholic' ? true : false,
+      isAlcoholic: true,
+      ingredients: [],
+      imageUrl: json['url_thumb'],
+      isFavorite: getFavorite(json['id']),
+    );
+  }
+
+  static Future<DrinkEntity> fromJsonMockup(Map<String, dynamic> json) async {
+    return DrinkEntity(
+      id: int.parse(json['idDrink']),
+      //modifyDate = DateTime.parse(json['dateModified'] ?? '2000-01-01 00:00:00'),
+      name: json['strDrink'],
+      instructions: json['strInstructions'],
+      category: json['strCategory'],
+      isAlcoholic: json['strAlcoholic'] == 'Alcoholic' ? true : false,
+      ingredients: [],
+      imageUrl: json['strDrinkThumb'],
+      isFavorite: getFavorite(int.parse(json['idDrink'])),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -36,8 +62,8 @@ class CocktailEntity {
         'strInstructions': instructions,
         'strCategory': category,
         'strAlcoholic': isAlcoholic ? 'Alcoholic' : 'Not Alcoholic',
-        'strIngredient1': ingredients[0].name,
-        'strIngredient2': ingredients[1].name,
+        'ingredients': jsonEncode(ingredients),
+        /*'strIngredient2': ingredients[1].name,
         'strIngredient3': ingredients[2].name,
         'strIngredient4': ingredients[3].name,
         'strIngredient5': ingredients[4].name,
@@ -65,9 +91,9 @@ class CocktailEntity {
         'strMeasure12': ingredients[11].measure,
         'strMeasure13': ingredients[12].measure,
         'strMeasure14': ingredients[13].measure,
-        'strMeasure15': ingredients[14].measure,
+        'strMeasure15': ingredients[14].measure,*/
         'strDrinkThumb': imageUrl,
-        'dateModified': modifyDate.toString(),
+        /*'dateModified': modifyDate.toString(),*/
       };
 }
 
@@ -76,4 +102,9 @@ class Ingredient {
   String measure;
 
   Ingredient(this.name, this.measure);
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'measure': measure,
+      };
 }

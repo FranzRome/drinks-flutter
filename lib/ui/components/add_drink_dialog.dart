@@ -1,25 +1,21 @@
-import 'package:cocktails/entities/cocktail_entity.dart';
+import 'package:cocktails/entities/drink_entity.dart';
 import 'package:flutter/material.dart';
 
 //TODO Try Bottom Sheet
 
-class AddCocktailDialog extends StatefulWidget {
-  const AddCocktailDialog(
+class AddDrinkDialog extends StatefulWidget {
+  const AddDrinkDialog(
       {super.key, required this.addFunction, required this.listLength});
 
   final AddFunction addFunction;
   final int listLength;
 
   @override
-  State<AddCocktailDialog> createState() =>
-      _AddCocktailDialogState(addFunction, listLength);
+  State<AddDrinkDialog> createState() => _AddDrinkDialogState();
 }
 
-class _AddCocktailDialogState extends State<AddCocktailDialog> {
-  _AddCocktailDialogState(this.addFunction, this.listLength);
-
-  AddFunction addFunction;
-  int listLength;
+class _AddDrinkDialogState extends State<AddDrinkDialog> {
+  _AddDrinkDialogState();
 
   int id = 0;
   String name = '';
@@ -189,22 +185,31 @@ class _AddCocktailDialogState extends State<AddCocktailDialog> {
   }
 
   void submit() {
-    if (name.isEmpty ||
-        instructions.isEmpty ||
-        category.isEmpty ||
-        ingredients.isEmpty) {
+    if (name.isEmpty || instructions.isEmpty || category.isEmpty) {
       _showError(context);
       return;
     }
-    addFunction(CocktailEntity(
-        id: listLength + 1,
-        modifyDate: DateTime.now(),
+
+    for(Ingredient i in ingredients){
+      if(i.name.isEmpty || i.measure.isEmpty) {
+        _showError(context);
+        return;
+      }
+    }
+
+    widget.addFunction(
+      DrinkEntity(
+        id: widget.listLength + 1,
+        //modifyDate: DateTime.now(),
         name: name,
         instructions: instructions,
         category: category,
         isAlcoholic: isAlcoholic,
         ingredients: ingredients,
-        imageUrl: imageUrl));
+        imageUrl: imageUrl,
+        isFavorite: true,
+      ),
+    );
     Navigator.of(context).pop();
   }
 
@@ -231,4 +236,4 @@ class _AddCocktailDialogState extends State<AddCocktailDialog> {
   }
 }
 
-typedef AddFunction = void Function(CocktailEntity cocktail);
+typedef AddFunction = void Function(DrinkEntity cocktail);
