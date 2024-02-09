@@ -4,7 +4,6 @@ import 'package:cocktails/globals/local_data.dart';
 
 class DrinkModel {
   final int id;
-  //final DateTime modifyDate;
   final String name;
   final Instruction instructions;
   final String category;
@@ -15,7 +14,6 @@ class DrinkModel {
 
   DrinkModel({
     required this.id,
-    //required this.modifyDate,
     required this.name,
     required this.instructions,
     required this.category,
@@ -33,7 +31,7 @@ class DrinkModel {
       instructions: json['instructions'],
       category: json['category'],
       //isAlcoholic: json['strAlcoholic'] == 'Alcoholic' ? true : false,
-      isAlcoholic: true,
+      isAlcoholic: json['alcoholic'],
       ingredients: json['ingredients'],
       imageUrl: json['url_thumb'],
       isFavorite: getFavorite(json['id']),
@@ -54,16 +52,24 @@ class DrinkModel {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'idDrink': '',
-        'strDrink': name,
-        'strInstructions': instructions,
-        'strCategory': category,
-        'strAlcoholic': isAlcoholic ? 'Alcoholic' : 'Not Alcoholic',
-        'ingredients': jsonEncode(ingredients),
-        'strDrinkThumb': imageUrl,
-      };
+  String toJson() => jsonEncode(
+        {
+          'name': name,
+          'alternate_name': name,
+          'alcoholic': isAlcoholic,
+          'glass': '',
+          'category': '',
+          'url_thumb': imageUrl,
+          'image_attribution': '',
+          'image_source': '',
+          'video': '',
+          'tags': '',
+          'iba': '',
+          'creative_commons': '',
+          'ingredients': jsonEncode(ingredients),
+          'strInstructions': jsonEncode(instructions),
+        },
+      );
 }
 
 class Instruction {
@@ -72,16 +78,15 @@ class Instruction {
 
   Instruction(this.language, this.text);
 
-
-  Instruction.fromJson(Map<String, dynamic> json){
+  Instruction.fromJson(Map<String, dynamic> json) {
     language = json['language'];
     text = json['text'];
   }
 
-  Map<String, dynamic> toJson() => {
+/*Map<String, dynamic> toJson() => {
         'language': text,
         'text': language,
-      };
+      };*/
 }
 
 class Ingredient {
@@ -90,12 +95,12 @@ class Ingredient {
 
   Ingredient(this.name, this.measure);
 
-  Ingredient.fromJson(Map<String, dynamic> json){
+  Ingredient.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     measure = json['measure'];
   }
-  Map<String, dynamic> toJson() => {
+/*String toJson() => {
         'name': name,
         'measure': measure,
-      };
+      };*/
 }
