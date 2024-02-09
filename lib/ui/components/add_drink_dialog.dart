@@ -19,9 +19,9 @@ class AddDrinkDialog extends StatefulWidget {
 
 class _AddDrinkDialogState extends State<AddDrinkDialog> {
   String name = '';
-  String instructions = '';
   String category = '';
   bool isAlcoholic = true;
+  List<Instruction> instructions = [Instruction('', '')];
   List<Ingredient> ingredients = [Ingredient('', '')];
   String imageUrl = '';
 
@@ -67,7 +67,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                       border: OutlineInputBorder(),
                       labelText: 'Instructions',
                       labelStyle: TextStyle()),
-                  onChanged: (value) => {instructions = value},
+                  onChanged: (value) => {instructions[0].text = value},
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 180),
@@ -202,7 +202,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
         id: widget.listLength + 1,
         //modifyDate: DateTime.now(),
         name: name,
-        instructions: instructions,
+        instructions: instructions[0],
         category: category,
         isAlcoholic: isAlcoholic,
         ingredients: ingredients,
