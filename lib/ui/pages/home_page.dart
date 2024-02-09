@@ -1,6 +1,6 @@
-import 'package:cocktails/models/drink_model.dart';
 import 'package:cocktails/globals/api.dart';
 import 'package:cocktails/globals/my_theme.dart';
+import 'package:cocktails/models/drink_model.dart';
 import 'package:cocktails/ui/components/add_drink_dialog.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -19,11 +19,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   //final GlobalKey<DrinkListState> _mKey = GlobalKey();
-  final Api _api= Api();
+  final Api _api = Api();
   List<DrinkModel> drinks = [];
   List<DrinkModel> filteredDrinks = [];
   List<Ingredient> ingredients = [];
-  List<Ingredient> languages = [];
+  List<String> languages = [];
+  List<String> categories = [];
   final TextEditingController textController = TextEditingController();
 
   @override
@@ -151,7 +152,6 @@ class _HomePageState extends State<HomePage> {
   void fetch() async {
     // Make an API call to get all drinks
     try {
-
       final Response response = await _api.getAllDrinks();
       _checkResponse(response);
 
@@ -161,7 +161,7 @@ class _HomePageState extends State<HomePage> {
         if (e['name'] != null && e['name'].toString().isNotEmpty) {
           //result.add(await DrinkEntity.fromJsonApi(e));
           drinks.add(
-             DrinkModel.fromJsonApi(e),
+            DrinkModel.fromJsonApi(e),
           );
         }
       }
@@ -171,14 +171,28 @@ class _HomePageState extends State<HomePage> {
       _checkResponse(propertiesResponse);
 
       print(propertiesResponse.data);
+      // Fill ingredients list
       for (Map<String, dynamic> e in propertiesResponse.data['ingredient']) {
         ingredients.add(Ingredient.fromJson(e));
       }
-      print(ingredients.toString());
+
+      for (Map<String, dynamic> e in propertiesResponse.data['category']) {
+        categories.add(e['name']);
+      }
     } on Exception catch (e) {
       _showError(e.toString());
-      for (dynamic e in await _api.loadMockup()) {
+      for (dynamic e in await _api.loadDrinkMockup()) {
         drinks.add(DrinkModel.fromJsonMockup(e));
+      }
+
+      Map<String, List<dynamic>> drinkProps = await _api.loadDrinkPropertiesMockup();
+
+      for (Map<String, dynamic> e in drinkProps['ingredient']!) {
+        ingredients.add(Ingredient.fromJson(e));
+      }
+
+      for (Map<String, dynamic> e in drinkProps['category']!) {
+        categories.add(e['name']);
       }
     }
 
@@ -291,23 +305,26 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: MyTheme.background,
       builder: (BuildContext context) {
         return AddDrinkDialog(
-            addFunction: addCocktail);
+          addFunction: addDrink,
+          availableIngredients: ingredients,
+          availableCategories: categories,
+        );
       },
     );
   }
 
   // Adds a new drink to the list and send a post request to API
-  void addCocktail(DrinkModel cocktail) async {
+  void addDrink(DrinkModel drink) async {
     try {
-      print(cocktail.toJson());
-      //final Response resp = await Api.addDrink(cocktail);
-      //_checkResponse(resp);
+      print(drink.toJson());
+      final Response resp = await _api.addDrink(drink);
+      _checkResponse(resp);
     } on Exception catch (e) {
       _showError(e.toString());
     } finally {
       setState(
         () {
-          drinks.add(cocktail);
+          drinks.add(drink);
         },
       );
     }

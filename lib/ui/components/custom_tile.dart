@@ -26,7 +26,8 @@ class CustomTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           child: CachedNetworkImage(
             imageUrl: drink.imageUrl,
-            placeholder: (context, url) => const CircularProgressIndicator(),
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                CircularProgressIndicator(value: downloadProgress.progress),
             errorWidget: (context, url, error) => const Image(
               image: AssetImage('assets/drink-icon.png'),
             ),

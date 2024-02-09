@@ -1,0 +1,306 @@
+{
+  "category": [
+    {
+      "id": 1,
+      "name": "Cocktail"
+    },
+    {
+      "id": 2,
+      "name": "Shot"
+    },
+    {
+      "id": 3,
+      "name": "Ordinary Drink"
+    },
+    {
+      "id": 4,
+      "name": "Other / Unknown"
+    },
+    {
+      "id": 5,
+      "name": "Coffee / Tea"
+    }
+  ],
+  "languages": [
+    {
+      "id": 1,
+      "language": "eng"
+    },
+    {
+      "id": 2,
+      "language": "de"
+    },
+    {
+      "id": 3,
+      "language": "es"
+    },
+    {
+      "id": 4,
+      "language": "fr"
+    },
+    {
+      "id": 5,
+      "language": "it"
+    },
+    {
+      "id": 6,
+      "language": "zh_hans"
+    },
+    {
+      "id": 7,
+      "language": "zh_hant"
+    }
+  ],
+  "glass": [
+    {
+      "id": 1,
+      "name": "Cocktail glass"
+    },
+    {
+      "id": 2,
+      "name": "Shot glass"
+    },
+    {
+      "id": 3,
+      "name": "Martini Glass"
+    },
+    {
+      "id": 4,
+      "name": "Highball Glass"
+    },
+    {
+      "id": 5,
+      "name": "Collins Glass"
+    },
+    {
+      "id": 6,
+      "name": "Old-fashioned glass"
+    }
+  ],
+  "ingredient": [
+    {
+      "id": 1,
+      "name": "151 proof rum"
+    },
+    {
+      "id": 2,
+      "name": "Absolut Vodka"
+    },
+    {
+      "id": 3,
+      "name": "Amaretto"
+    },
+    {
+      "id": 4,
+      "name": "Apple juice"
+    },
+    {
+      "id": 5,
+      "name": "Applejack"
+    },
+    {
+      "id": 6,
+      "name": "Baileys Irish cream"
+    },
+    {
+      "id": 7,
+      "name": "Blackberry brandy"
+    },
+    {
+      "id": 8,
+      "name": "Bourbon"
+    },
+    {
+      "id": 9,
+      "name": "Campari"
+    },
+    {
+      "id": 10,
+      "name": "Club soda"
+    },
+    {
+      "id": 11,
+      "name": "Coffee"
+    },
+    {
+      "id": 12,
+      "name": "Cognac"
+    },
+    {
+      "id": 13,
+      "name": "Cranberry juice"
+    },
+    {
+      "id": 14,
+      "name": "Cream"
+    },
+    {
+      "id": 15,
+      "name": "Creme de Banane"
+    },
+    {
+      "id": 16,
+      "name": "Creme de Cacao"
+    },
+    {
+      "id": 17,
+      "name": "Dark rum"
+    },
+    {
+      "id": 18,
+      "name": "Dry Vermouth"
+    },
+    {
+      "id": 19,
+      "name": "Egg white"
+    },
+    {
+      "id": 20,
+      "name": "Frangelico"
+    },
+    {
+      "id": 21,
+      "name": "Gin"
+    },
+    {
+      "id": 22,
+      "name": "Grand Marnier"
+    },
+    {
+      "id": 23,
+      "name": "Grapefruit juice"
+    },
+    {
+      "id": 24,
+      "name": "Grenadine"
+    },
+    {
+      "id": 25,
+      "name": "Heavy cream"
+    },
+    {
+      "id": 26,
+      "name": "Jack Daniels"
+    },
+    {
+      "id": 27,
+      "name": "Kahlua"
+    },
+    {
+      "id": 28,
+      "name": "Lemon juice"
+    },
+    {
+      "id": 29,
+      "name": "Lemon peel"
+    },
+    {
+      "id": 30,
+      "name": "Lemonade"
+    },
+    {
+      "id": 31,
+      "name": "Light cream"
+    },
+    {
+      "id": 32,
+      "name": "Light rum"
+    },
+    {
+      "id": 33,
+      "name": "Lime juice"
+    },
+    {
+      "id": 34,
+      "name": "Maraschino cherry"
+    },
+    {
+      "id": 35,
+      "name": "Maraschino liqueur"
+    },
+    {
+      "id": 36,
+      "name": "Midori melon liqueur"
+    },
+    {
+      "id": 37,
+      "name": "Milk"
+    },
+    {
+      "id": 38,
+      "name": "Mint"
+    },
+    {
+      "id": 39,
+      "name": "Nutmeg"
+    },
+    {
+      "id": 40,
+      "name": "Orange bitters"
+    },
+    {
+      "id": 41,
+      "name": "Orange juice"
+    },
+    {
+      "id": 42,
+      "name": "Orange peel"
+    },
+    {
+      "id": 43,
+      "name": "Peach nectar"
+    },
+    {
+      "id": 44,
+      "name": "Pineapple juice"
+    },
+    {
+      "id": 45,
+      "name": "Pisang Ambon"
+    },
+    {
+      "id": 46,
+      "name": "Scotch"
+    },
+    {
+      "id": 47,
+      "name": "Soda water"
+    },
+    {
+      "id": 48,
+      "name": "Sour mix"
+    },
+    {
+      "id": 49,
+      "name": "Strawberry schnapps"
+    },
+    {
+      "id": 50,
+      "name": "Sugar"
+    },
+    {
+      "id": 51,
+      "name": "Sweet Vermouth"
+    },
+    {
+      "id": 52,
+      "name": "Tonic water"
+    },
+    {
+      "id": 53,
+      "name": "Triple sec"
+    },
+    {
+      "id": 54,
+      "name": "Vermouth"
+    },
+    {
+      "id": 55,
+      "name": "Vodka"
+    },
+    {
+      "id": 56,
+      "name": "Wild Turkey"
+    }
+  ]
+}

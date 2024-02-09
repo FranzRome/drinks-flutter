@@ -51,7 +51,7 @@ class DrinkModel {
       id: int.parse(json['idDrink']),
       //modifyDate = DateTime.parse(json['dateModified'] ?? '2000-01-01 00:00:00'),
       name: json['strDrink'],
-      instructions: json['strInstructions'],
+      instructions: [Instruction(language:'eng', text:json['strInstructions'])],
       category: json['strCategory'],
       isAlcoholic: json['strAlcoholic'] == 'Alcoholic' ? true : false,
       ingredients: [],
@@ -73,8 +73,8 @@ class DrinkModel {
         'tags': '',
         'iba': '',
         'creative_commons': '',
-        'ingredients': ingredients.map((e) => e.toJson()).toList(),
-        'strInstructions': instructions.map((e) => e.toJson()).toList(),
+        'ingredients': ingredients.map((e) => e.toMap()).toList(),
+        'instruction': instructions.map((e) => e.toMap()).toList(),
       }).toString();
 }
 
@@ -91,10 +91,15 @@ class Instruction {
     );
   }
 
-  String toJson() => {
-        'language': text,
-        'text': language,
-      }.toString();
+  Map<String, String> toMap() => {
+    'language': language,
+    'text': text,
+  };
+
+  String toJson() => jsonEncode({
+        'language': language,
+        'text': text,
+      });
 }
 
 class Ingredient {
@@ -110,8 +115,13 @@ class Ingredient {
     );
   }
 
-  String toJson() => {
+  Map<String, String> toMap() => {
+    'name': name,
+    'measure': measure,
+  };
+
+  String toJson() => jsonEncode({
         'name': name,
         'measure': measure,
-      }.toString();
+      });
 }

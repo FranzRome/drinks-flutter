@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 class Api {
   late Dio _dio;
 
-  Api(){
+  Api() {
     final connectionOptions = BaseOptions(
       baseUrl: 'http://192.168.178.36:8080/',
       connectTimeout: const Duration(seconds: 5),
@@ -23,15 +23,23 @@ class Api {
 
   Future<Response> getAllDrinkProperties() async {
     return await _dio.get('category-glass-ingredient-language');
-}
-
-  Future<Response> addDrink(DrinkModel cocktail) async {
-    return await _dio.post('api/drink', data: cocktail.toJson());
   }
 
-  Future<List<dynamic>> loadMockup() async {
+  Future<Response> addDrink(DrinkModel cocktail) async {
+    Response resp = await _dio.post('api/drink', data: cocktail.toJson());
+    return resp;
+  }
+
+  Future<List<dynamic>> loadDrinkMockup() async {
     List<dynamic> result = json.decode(
         await rootBundle.loadString('assets/json/drinks.json'))['drinks'];
+
+    return result;
+  }
+
+  Future<Map<String, List<dynamic>>> loadDrinkPropertiesMockup() async {
+    Map<String, List<dynamic>> result = json.decode(
+        await rootBundle.loadString('assets/json/properties.json'));
 
     return result;
   }

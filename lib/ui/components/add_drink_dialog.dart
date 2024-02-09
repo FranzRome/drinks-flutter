@@ -1,14 +1,16 @@
 import 'package:cocktails/models/drink_model.dart';
 import 'package:flutter/material.dart';
 
-//TODO Try Bottom Sheet
-
 class AddDrinkDialog extends StatefulWidget {
   final AddFunction addFunction;
+  final List<Ingredient> availableIngredients;
+  final List<String> availableCategories;
 
   const AddDrinkDialog({
     super.key,
     required this.addFunction,
+    required this.availableIngredients,
+    required this.availableCategories,
   });
 
   @override
@@ -17,15 +19,23 @@ class AddDrinkDialog extends StatefulWidget {
 
 class _AddDrinkDialogState extends State<AddDrinkDialog> {
   String name = '';
-  String category = '';
+  late String selectedCategory;
   bool isAlcoholic = true;
   List<Instruction> instructions = [Instruction(language: 'eng', text: '')];
   List<Ingredient> ingredients = [Ingredient(name: '', measure: '')];
+  late String selectedIngredientName;
   String imageUrl = '';
 
   TextEditingController instructionsTextController = TextEditingController();
   TextEditingController ingredientNameController = TextEditingController();
   TextEditingController ingredientMeasureController = TextEditingController();
+
+  @override
+  void initState() {
+    selectedCategory = widget.availableCategories.first;
+    selectedIngredientName = widget.availableIngredients.first.name;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +61,22 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                   onChanged: (value) => {name = value},
                 ),
                 const SizedBox(height: 18),
-                TextField(
+                SizedBox(
+                  width: double.infinity,
+                  child: DropdownMenu<String>(
+                    initialSelection: widget.availableCategories.first,
+                    onSelected: (String? value) {
+                      // This is called when the user selects an item.
+                      setState(() {
+                        selectedCategory = value!;
+                      });
+                    },
+                    dropdownMenuEntries: widget.availableCategories.map<DropdownMenuEntry<String>>((String c) {
+                      return DropdownMenuEntry<String>(value: c, label: c);
+                    }).toList(),
+                  ),
+                ),
+                /*TextField(
                   obscureText: false,
                   decoration: const InputDecoration(
                     floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -59,7 +84,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                     labelText: 'Category',
                   ),
                   onChanged: (value) => {category = value},
-                ),
+                ),*/
                 const SizedBox(height: 18),
                 TextField(
                   controller: instructionsTextController,
@@ -97,7 +122,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                   child: const Text('Add Ingredient'),
                 ),*/
                 const SizedBox(height: 18),
-                /* TextField(
+                TextField(
                   obscureText: false,
                   decoration: const InputDecoration(
                     floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -105,7 +130,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                     labelText: 'Image URL',
                   ),
                   onChanged: (value) => {imageUrl = value},
-                ),*/
+                ),
                 const SizedBox(height: 18),
                 ElevatedButton(
                   onPressed: () {
@@ -129,6 +154,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
         (index) => Padding(
           padding: const EdgeInsets.only(top: 5),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
@@ -136,26 +162,28 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                 style: const TextStyle(fontSize: 18),
               ),
               const SizedBox(width: 5),
-              Expanded(
-                child: TextField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Ingredient',
-                    labelStyle: TextStyle(fontSize: 12),
-                  ),
-                  controller: ingredientNameController,
-                  onChanged: (value) {
-                    //ingredients[index].name = value;
-                  },
-                ),
+              DropdownMenu<String>(
+                initialSelection: selectedIngredientName,
+                width: 180,
+                onSelected: (String? value) {
+                  // This is called when the user selects an item.
+                  setState(() {
+                    selectedIngredientName = value!;
+                  });
+                },
+                dropdownMenuEntries: widget.availableIngredients.map<DropdownMenuEntry<String>>((Ingredient i) {
+                  return DropdownMenuEntry<String>(value: i.name, label: i.name);
+                }).toList(),
               ),
               const SizedBox(width: 5),
-              Expanded(
+              SizedBox(
+                width: 80,
                 child: TextField(
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Measure',
-                      labelStyle: TextStyle(fontSize: 12)),
+                      //labelStyle: TextStyle(fontSize: 12),
+                  ),
                   controller: ingredientMeasureController,
                   onChanged: (value) {
                     //ingredients[index].measure = value;
@@ -187,7 +215,6 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
 
   void submit() {
     if (name.isEmpty ||
-        category.isEmpty ||
         instructionsTextController.text.isEmpty) {
       _showError(context);
       return;
@@ -200,8 +227,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
       }
     }*/
 
-    if (ingredientNameController.text.isEmpty ||
-        ingredientMeasureController.text.isEmpty) {
+    if (ingredientMeasureController.text.isEmpty) {
       _showError(context);
       return;
     }
@@ -217,11 +243,11 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
             text: instructionsTextController.text,
           )
         ],
-        category: category,
+        category: selectedCategory,
         isAlcoholic: isAlcoholic,
         ingredients: [
           Ingredient(
-            name: ingredientNameController.text,
+            name: selectedIngredientName,
             measure: ingredientMeasureController.text,
           )
         ],
