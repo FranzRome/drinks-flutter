@@ -1,4 +1,4 @@
-import 'package:cocktails/entities/drink_entity.dart';
+import 'package:cocktails/models/drink_model.dart';
 import 'package:flutter/material.dart';
 
 class IngredientsListing extends StatelessWidget {

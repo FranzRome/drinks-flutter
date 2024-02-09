@@ -1,12 +1,12 @@
 import 'package:cocktails/ui/components/ingredients_listing.dart';
-import 'package:cocktails/entities/drink_entity.dart';
+import 'package:cocktails/models/drink_model.dart';
 import 'package:cocktails/ui/components/favorite_button.dart';
 import 'package:flutter/material.dart';
 
 class DrinkDetail extends StatelessWidget {
   const DrinkDetail(this.entity, {super.key});
 
-  final DrinkEntity entity;
+  final DrinkModel entity;
 
   @override
   Widget build(BuildContext context) {

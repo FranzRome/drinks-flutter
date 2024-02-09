@@ -1,10 +1,11 @@
-import 'package:cocktails/entities/drink_entity.dart';
+import 'package:cocktails/models/drink_model.dart';
 import 'package:cocktails/globals/api.dart';
 import 'package:cocktails/globals/my_theme.dart';
 import 'package:cocktails/ui/components/add_drink_dialog.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
+import '../../globals/local_data.dart';
 import '../components/custom_tile.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,8 +19,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   //final GlobalKey<DrinkListState> _mKey = GlobalKey();
-  List<DrinkEntity> drinks = [];
-  List<DrinkEntity> filteredDrinks = [];
+  List<DrinkModel> drinks = [];
+  List<DrinkModel> filteredDrinks = [];
   final TextEditingController textController = TextEditingController();
 
   @override
@@ -102,9 +103,9 @@ class _HomePageState extends State<HomePage> {
                           .map(
                             (drink) => CustomTile(
                               drink: drink,
-                              /*onBack: (id) {
+                              onBack: (id) {
                                 onBack(drink.id);
-                              },*/
+                              },
                             ),
                           )
                           .toList(),
@@ -136,7 +137,7 @@ class _HomePageState extends State<HomePage> {
   void onBack(int id) {
     int index = filteredDrinks.indexWhere((element) => element.id == id);
     setState(() {
-      //drinks[index].isFavorite = getFavorite(id);
+      drinks[index].isFavorite = getFavorite(id);
       /*textController.clear();
       _filterDrinks();*/
     });
@@ -156,14 +157,14 @@ class _HomePageState extends State<HomePage> {
         if (e['name'] != null && e['name'].toString().isNotEmpty) {
           //result.add(await DrinkEntity.fromJsonApi(e));
           drinks.add(
-            await DrinkEntity.fromJsonApi(e),
+             DrinkModel.fromJsonApi(e),
           );
         }
       }
     } on Exception catch (e) {
       _showError(e.toString());
       for (dynamic e in await Api.loadMockup()) {
-        drinks.add(await DrinkEntity.fromJsonMockup(e));
+        drinks.add(await DrinkModel.fromJsonMockup(e));
       }
     }
 
@@ -282,7 +283,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   // Adds a new drink to the list and send a post request to API
-  void addCocktail(DrinkEntity cocktail) async {
+  void addCocktail(DrinkModel cocktail) async {
     try {
       final Response resp = await Api.addDrink(cocktail);
       _checkResponse(resp);

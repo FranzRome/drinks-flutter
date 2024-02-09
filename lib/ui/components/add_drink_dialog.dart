@@ -1,23 +1,23 @@
-import 'package:cocktails/entities/drink_entity.dart';
+import 'package:cocktails/models/drink_model.dart';
 import 'package:flutter/material.dart';
 
 //TODO Try Bottom Sheet
 
 class AddDrinkDialog extends StatefulWidget {
-  const AddDrinkDialog(
-      {super.key, required this.addFunction, required this.listLength});
-
   final AddFunction addFunction;
   final int listLength;
+
+  const AddDrinkDialog({
+    super.key,
+    required this.addFunction,
+    required this.listLength,
+  });
 
   @override
   State<AddDrinkDialog> createState() => _AddDrinkDialogState();
 }
 
 class _AddDrinkDialogState extends State<AddDrinkDialog> {
-  _AddDrinkDialogState();
-
-  int id = 0;
   String name = '';
   String instructions = '';
   String category = '';
@@ -190,15 +190,15 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
       return;
     }
 
-    for(Ingredient i in ingredients){
-      if(i.name.isEmpty || i.measure.isEmpty) {
+    for (Ingredient i in ingredients) {
+      if (i.name.isEmpty || i.measure.isEmpty) {
         _showError(context);
         return;
       }
     }
 
     widget.addFunction(
-      DrinkEntity(
+      DrinkModel(
         id: widget.listLength + 1,
         //modifyDate: DateTime.now(),
         name: name,
@@ -236,4 +236,4 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
   }
 }
 
-typedef AddFunction = void Function(DrinkEntity cocktail);
+typedef AddFunction = void Function(DrinkModel cocktail);

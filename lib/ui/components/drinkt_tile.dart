@@ -1,12 +1,12 @@
-import 'package:cocktails/ui/components/drink_detail.dart';
-import 'package:cocktails/entities/drink_entity.dart';
+import 'package:cocktails/ui/pages/drink_detail.dart';
+import 'package:cocktails/models/drink_model.dart';
 import 'package:cocktails/ui/components/favorite_button.dart';
 import 'package:flutter/material.dart';
 
 class DrinkTile extends StatefulWidget {
   const DrinkTile({super.key, required this.drink, required this.backFun});
 
-  final DrinkEntity drink;
+  final DrinkModel drink;
   final Function backFun;
 
   @override

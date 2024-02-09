@@ -1,4 +1,4 @@
-import 'package:cocktails/entities/drink_entity.dart';
+import 'package:cocktails/models/drink_model.dart';
 import 'package:cocktails/ui/components/custom_tile.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +9,7 @@ class DrinkList extends StatefulWidget {
     required this.onBack,
   }) : super(key: key);
 
-  final List<DrinkEntity> drinks;
+  final List<DrinkModel> drinks;
   final void Function(int id) onBack;
 
   @override
@@ -17,7 +17,7 @@ class DrinkList extends StatefulWidget {
 }
 
 class DrinkListState extends State<DrinkList> {
-  List<DrinkEntity> filteredDrinks = [];
+  List<DrinkModel> filteredDrinks = [];
 
   @override
   void initState() {
@@ -44,9 +44,9 @@ class DrinkListState extends State<DrinkList> {
             ? ListView.builder(
           itemCount: widget.drinks.length,
           itemBuilder: (context, index) {
-            DrinkEntity drink = widget.drinks[index];
+            DrinkModel drink = widget.drinks[index];
             return CustomTile(drink: drink,
-              //onBack: (int id){},
+              onBack: (int id){},
             );
             /*return DrinkListTile(
                         drink,
@@ -59,9 +59,9 @@ class DrinkListState extends State<DrinkList> {
             : ListView.builder(
           itemCount: filteredDrinks.length,
           itemBuilder: (context, index) {
-            DrinkEntity drink = filteredDrinks[index];
+            DrinkModel drink = filteredDrinks[index];
             return CustomTile(drink: drink,
-              //onBack: (int id){},
+              onBack: (int id){},
             );
             /*return DrinkListTile(
                         filteredCocktails[index],

@@ -1,25 +1,20 @@
-import 'package:cocktails/entities/drink_entity.dart';
+import 'package:cocktails/models/drink_model.dart';
 import 'package:cocktails/globals/my_theme.dart';
 import 'package:cocktails/ui/components/favorite_button.dart';
 import 'package:flutter/material.dart';
 
-import 'drink_detail.dart';
+import '../pages/drink_detail.dart';
 
-class CustomTile extends StatefulWidget {
-  final DrinkEntity drink;
-  //final void Function(int id) onBack;
+class CustomTile extends StatelessWidget {
+  final DrinkModel drink;
+  final void Function(int id) onBack;
 
   const CustomTile({
     Key? key,
     required this.drink,
-    //required this.onBack,
+    required this.onBack,
   }) : super(key: key);
 
-  @override
-  State<CustomTile> createState() => _CustomTileState();
-}
-
-class _CustomTileState extends State<CustomTile> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -28,7 +23,7 @@ class _CustomTileState extends State<CustomTile> {
         style: ListTileStyle.drawer,
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: Image.network(widget.drink.imageUrl),
+          child: Image.network(drink.imageUrl),
           /*widget.drink.imageUrl.isNotEmpty
                   ? Image.network(widget.drink.imageUrl)
                   : */
@@ -38,32 +33,28 @@ class _CustomTileState extends State<CustomTile> {
           ),*/
         ),
         title: Text(
-          widget.drink.name,
+          drink.name,
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
-          widget.drink.category,
+          drink.category,
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.normal,
             color: MyTheme.lightText,
           ),
         ),
-        trailing: FavoriteButton(widget.drink),
+        trailing: FavoriteButton(drink),
         onTap: () {
           Navigator.of(context)
               .push(
             MaterialPageRoute(
-              builder: (context) => DrinkDetail(widget.drink),
+              builder: (context) => DrinkDetail(drink),
             ),
           )
               .then(
             (_) {
-              print(widget.drink.hashCode);
-              setState(() {
-
-              });
-              //onBack(drink.id);
+              onBack(drink.id);
             },
           );
         },
