@@ -1,4 +1,3 @@
-import 'package:cocktails/ui/components/ingredients_listing.dart';
 import 'package:cocktails/models/drink_model.dart';
 import 'package:cocktails/ui/components/favorite_button.dart';
 import 'package:flutter/material.dart';
@@ -74,20 +73,67 @@ class DrinkDetail extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   IngredientsListing(entity.ingredients),
-                  const Spacer(),
+                  const SizedBox(
+                    height: 14,
+                  ),
                   const Text(
                     'Instructions',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                  Text(
-                    entity.instructions.toString(),
-                    style: const TextStyle(fontSize: 16),
-                  ),
+                  entity.instructions.isNotEmpty
+                      ? Text(
+                          entity.instructions[0].text,
+                          style: const TextStyle(fontSize: 16),
+                        )
+                      : const Text('Instructions missing'),
                   const Spacer(),
                 ],
               )),
         ),
       ),
+    );
+  }
+}
+
+class IngredientsListing extends StatelessWidget {
+  const IngredientsListing(this.ingredients, {super.key});
+
+  final List<Ingredient> ingredients;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: ingredients.isNotEmpty
+              ? List.generate(
+                  ingredients.length,
+                  (index) => Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 2, horizontal: 8),
+                        child: Text('${ingredients[index].name}:'),
+                      ),
+                    ],
+                  ),
+                )
+              : [const Text('Ingredients missing')],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: List.generate(
+            ingredients.length,
+            (index) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+              child: Text(ingredients[index].measure),
+            ),
+          ),
+        )
+      ],
     );
   }
 }

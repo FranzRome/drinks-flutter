@@ -5,10 +5,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 
 class Api {
-  static late Dio _dio;
+  late Dio _dio;
 
-  // Call this method in main to configure dio
-  static void configureDio() {
+  Api(){
     final connectionOptions = BaseOptions(
       baseUrl: 'http://192.168.178.36:8080/',
       connectTimeout: const Duration(seconds: 5),
@@ -18,15 +17,19 @@ class Api {
     _dio = Dio(connectionOptions);
   }
 
-  static Future<Response> getAllDrinks() async {
+  Future<Response> getAllDrinks() async {
     return await _dio.get('api/drink/getall');
   }
 
-  static Future<Response> addDrink(DrinkModel cocktail) async {
+  Future<Response> getAllDrinkProperties() async {
+    return await _dio.get('category-glass-ingredient-language');
+}
+
+  Future<Response> addDrink(DrinkModel cocktail) async {
     return await _dio.post('api/drink', data: cocktail.toJson());
   }
 
-  static Future<List<dynamic>> loadMockup() async {
+  Future<List<dynamic>> loadMockup() async {
     List<dynamic> result = json.decode(
         await rootBundle.loadString('assets/json/drinks.json'))['drinks'];
 

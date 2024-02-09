@@ -1,5 +1,6 @@
-import 'package:cocktails/models/drink_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/globals/my_theme.dart';
+import 'package:cocktails/models/drink_model.dart';
 import 'package:cocktails/ui/components/favorite_button.dart';
 import 'package:flutter/material.dart';
 
@@ -23,14 +24,13 @@ class CustomTile extends StatelessWidget {
         style: ListTileStyle.drawer,
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: Image.network(drink.imageUrl),
-          /*widget.drink.imageUrl.isNotEmpty
-                  ? Image.network(widget.drink.imageUrl)
-                  : */
-
-          /*const Image(
-            image: AssetImage('assets/drink-icon.png'),
-          ),*/
+          child: CachedNetworkImage(
+            imageUrl: drink.imageUrl,
+            placeholder: (context, url) => const CircularProgressIndicator(),
+            errorWidget: (context, url, error) => const Image(
+              image: AssetImage('assets/drink-icon.png'),
+            ),
+          ),
         ),
         title: Text(
           drink.name,

@@ -5,12 +5,10 @@ import 'package:flutter/material.dart';
 
 class AddDrinkDialog extends StatefulWidget {
   final AddFunction addFunction;
-  final int listLength;
 
   const AddDrinkDialog({
     super.key,
     required this.addFunction,
-    required this.listLength,
   });
 
   @override
@@ -21,9 +19,13 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
   String name = '';
   String category = '';
   bool isAlcoholic = true;
-  List<Instruction> instructions = [Instruction('', '')];
-  List<Ingredient> ingredients = [Ingredient('', '')];
+  List<Instruction> instructions = [Instruction(language: 'eng', text: '')];
+  List<Ingredient> ingredients = [Ingredient(name: '', measure: '')];
   String imageUrl = '';
+
+  TextEditingController instructionsTextController = TextEditingController();
+  TextEditingController ingredientNameController = TextEditingController();
+  TextEditingController ingredientMeasureController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +62,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                 ),
                 const SizedBox(height: 18),
                 TextField(
+                  controller: instructionsTextController,
                   maxLines: 3,
                   obscureText: false,
                   decoration: const InputDecoration(
@@ -67,7 +70,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                       border: OutlineInputBorder(),
                       labelText: 'Instructions',
                       labelStyle: TextStyle()),
-                  onChanged: (value) => {instructions[0].text = value},
+                  onChanged: (value) => {},
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 180),
@@ -83,7 +86,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                           }),
                 ),
                 ingredientsInputs(),
-                TextButton(
+                /*TextButton(
                   onPressed: () {
                     setState(() {
                       ingredients.add(
@@ -92,9 +95,9 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                     });
                   },
                   child: const Text('Add Ingredient'),
-                ),
+                ),*/
                 const SizedBox(height: 18),
-                TextField(
+                /* TextField(
                   obscureText: false,
                   decoration: const InputDecoration(
                     floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -102,7 +105,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                     labelText: 'Image URL',
                   ),
                   onChanged: (value) => {imageUrl = value},
-                ),
+                ),*/
                 const SizedBox(height: 18),
                 ElevatedButton(
                   onPressed: () {
@@ -140,10 +143,9 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                     labelText: 'Ingredient',
                     labelStyle: TextStyle(fontSize: 12),
                   ),
-                  controller:
-                      TextEditingController(text: ingredients[index].name),
+                  controller: ingredientNameController,
                   onChanged: (value) {
-                    ingredients[index].name = value;
+                    //ingredients[index].name = value;
                   },
                 ),
               ),
@@ -154,10 +156,9 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                       border: OutlineInputBorder(),
                       labelText: 'Measure',
                       labelStyle: TextStyle(fontSize: 12)),
-                  controller:
-                      TextEditingController(text: ingredients[index].measure),
+                  controller: ingredientMeasureController,
                   onChanged: (value) {
-                    ingredients[index].measure = value;
+                    //ingredients[index].measure = value;
                   },
                 ),
               ),
@@ -185,27 +186,45 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
   }
 
   void submit() {
-    if (name.isEmpty || instructions.isEmpty || category.isEmpty) {
+    if (name.isEmpty ||
+        category.isEmpty ||
+        instructionsTextController.text.isEmpty) {
       _showError(context);
       return;
     }
 
-    for (Ingredient i in ingredients) {
+    /*for (Ingredient i in ingredients) {
       if (i.name.isEmpty || i.measure.isEmpty) {
         _showError(context);
         return;
       }
+    }*/
+
+    if (ingredientNameController.text.isEmpty ||
+        ingredientMeasureController.text.isEmpty) {
+      _showError(context);
+      return;
     }
 
     widget.addFunction(
       DrinkModel(
-        id: widget.listLength + 1,
+        id: -1,
         //modifyDate: DateTime.now(),
         name: name,
-        instructions: instructions[0],
+        instructions: [
+          Instruction(
+            language: 'eng',
+            text: instructionsTextController.text,
+          )
+        ],
         category: category,
         isAlcoholic: isAlcoholic,
-        ingredients: ingredients,
+        ingredients: [
+          Ingredient(
+            name: ingredientNameController.text,
+            measure: ingredientMeasureController.text,
+          )
+        ],
         imageUrl: imageUrl,
         isFavorite: true,
       ),

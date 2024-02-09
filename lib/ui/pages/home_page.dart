@@ -19,8 +19,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   //final GlobalKey<DrinkListState> _mKey = GlobalKey();
+  final Api _api= Api();
   List<DrinkModel> drinks = [];
   List<DrinkModel> filteredDrinks = [];
+  List<Ingredient> ingredients = [];
+  List<Ingredient> languages = [];
   final TextEditingController textController = TextEditingController();
 
   @override
@@ -141,14 +144,15 @@ class _HomePageState extends State<HomePage> {
       /*textController.clear();
       _filterDrinks();*/
     });
-    print('${drinks[index].name} ${drinks[index].isFavorite}');
+    //print('${drinks[index].name} ${drinks[index].isFavorite}');
   }
 
   // Makes an API call and fill drinks list
   void fetch() async {
     // Make an API call to get all drinks
     try {
-      final Response response = await Api.getAllDrinks();
+
+      final Response response = await _api.getAllDrinks();
       _checkResponse(response);
 
       drinks.clear();
@@ -161,10 +165,20 @@ class _HomePageState extends State<HomePage> {
           );
         }
       }
+
+      // Fetch properties
+      final Response propertiesResponse = await _api.getAllDrinkProperties();
+      _checkResponse(propertiesResponse);
+
+      print(propertiesResponse.data);
+      for (Map<String, dynamic> e in propertiesResponse.data['ingredient']) {
+        ingredients.add(Ingredient.fromJson(e));
+      }
+      print(ingredients.toString());
     } on Exception catch (e) {
       _showError(e.toString());
-      for (dynamic e in await Api.loadMockup()) {
-        drinks.add(await DrinkModel.fromJsonMockup(e));
+      for (dynamic e in await _api.loadMockup()) {
+        drinks.add(DrinkModel.fromJsonMockup(e));
       }
     }
 
@@ -277,7 +291,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: MyTheme.background,
       builder: (BuildContext context) {
         return AddDrinkDialog(
-            addFunction: addCocktail, listLength: drinks.length);
+            addFunction: addCocktail);
       },
     );
   }
@@ -285,8 +299,9 @@ class _HomePageState extends State<HomePage> {
   // Adds a new drink to the list and send a post request to API
   void addCocktail(DrinkModel cocktail) async {
     try {
-      final Response resp = await Api.addDrink(cocktail);
-      _checkResponse(resp);
+      print(cocktail.toJson());
+      //final Response resp = await Api.addDrink(cocktail);
+      //_checkResponse(resp);
     } on Exception catch (e) {
       _showError(e.toString());
     } finally {

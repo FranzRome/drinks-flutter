@@ -5,7 +5,7 @@ import 'package:cocktails/globals/local_data.dart';
 class DrinkModel {
   final int id;
   final String name;
-  final Instruction instructions;
+  final List<Instruction> instructions;
   final String category;
   final bool isAlcoholic;
   final List<Ingredient> ingredients;
@@ -23,16 +23,24 @@ class DrinkModel {
     required this.isFavorite,
   });
 
-  static DrinkModel fromJsonApi(Map<String, dynamic> json) {
+  factory DrinkModel.fromJsonApi(Map<String, dynamic> json) {
     return DrinkModel(
       id: json['id'],
       //modifyDate = DateTime.parse(json['dateModified'] ?? '2000-01-01 00:00:00'),
       name: json['name'],
-      instructions: json['instructions'],
+      instructions: json['instructions'] is List
+          ? (json['instructions'] as List)
+              .map((e) => Instruction.fromJson(e))
+              .toList()
+          : [],
       category: json['category'],
       //isAlcoholic: json['strAlcoholic'] == 'Alcoholic' ? true : false,
       isAlcoholic: json['alcoholic'],
-      ingredients: json['ingredients'],
+      ingredients: json['ingredients'] is List
+          ? (json['ingredients'] as List)
+              .map((e) => Ingredient.fromJson(e))
+              .toList()
+          : [],
       imageUrl: json['url_thumb'],
       isFavorite: getFavorite(json['id']),
     );
@@ -52,55 +60,58 @@ class DrinkModel {
     );
   }
 
-  String toJson() => jsonEncode(
-        {
-          'name': name,
-          'alternate_name': name,
-          'alcoholic': isAlcoholic,
-          'glass': '',
-          'category': '',
-          'url_thumb': imageUrl,
-          'image_attribution': '',
-          'image_source': '',
-          'video': '',
-          'tags': '',
-          'iba': '',
-          'creative_commons': '',
-          'ingredients': jsonEncode(ingredients),
-          'strInstructions': jsonEncode(instructions),
-        },
-      );
+  String toJson() => jsonEncode({
+        'name': name,
+        'alternate_name': name,
+        'alcoholic': isAlcoholic,
+        'glass': '',
+        'category': '',
+        'url_thumb': imageUrl,
+        'image_attribution': '',
+        'image_source': '',
+        'video': '',
+        'tags': '',
+        'iba': '',
+        'creative_commons': '',
+        'ingredients': ingredients.map((e) => e.toJson()).toList(),
+        'strInstructions': instructions.map((e) => e.toJson()).toList(),
+      }).toString();
 }
 
 class Instruction {
-  late final String language;
-  late final String text;
+  final String language;
+  final String text;
 
-  Instruction(this.language, this.text);
+  Instruction({required this.language, required this.text});
 
-  Instruction.fromJson(Map<String, dynamic> json) {
-    language = json['language'];
-    text = json['text'];
+  factory Instruction.fromJson(Map<String, dynamic> json) {
+    return Instruction(
+      language: json['language'],
+      text: json['text'] ?? '',
+    );
   }
 
-/*Map<String, dynamic> toJson() => {
+  String toJson() => {
         'language': text,
         'text': language,
-      };*/
+      }.toString();
 }
 
 class Ingredient {
   late final String name;
   late final String measure;
 
-  Ingredient(this.name, this.measure);
+  Ingredient({required this.name, required this.measure});
 
-  Ingredient.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    measure = json['measure'];
+  factory Ingredient.fromJson(Map<String, dynamic> json) {
+    return Ingredient(
+      name: json['name'],
+      measure: '',
+    );
   }
-/*String toJson() => {
+
+  String toJson() => {
         'name': name,
         'measure': measure,
-      };*/
+      }.toString();
 }

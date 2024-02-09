@@ -3,12 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:cocktails/ui/pages/home_page.dart';
 
-import 'globals/api.dart';
-
 void main() async {
   await Hive.initFlutter();
   await Hive.openBox('favorites');
-  Api.configureDio();
   runApp(const MyApp());
 }
 
