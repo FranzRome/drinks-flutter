@@ -55,6 +55,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 18),
                 TextField(
@@ -66,10 +67,11 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                   ),
                   onChanged: (value) => {name = value},
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
                   child: DropdownMenu<String>(
+                    hintText: 'Category',
                     initialSelection: widget.availableCategories.first,
                     onSelected: (String? value) {
                       // This is called when the user selects an item.
@@ -83,7 +85,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                     }).toList(),
                   ),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 24),
                 TextField(
                   controller: instructionsTextController,
                   maxLines: 3,
@@ -95,19 +97,9 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                       labelStyle: TextStyle()),
                   onChanged: (value) => {},
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 180),
-                  child: CheckboxListTile(
-                      value: isAlcoholic,
-                      title: const Text(
-                        'Alcoholic',
-                      ),
-                      onChanged: (bool? value) => {
-                            setState(() {
-                              isAlcoholic = !isAlcoholic;
-                            })
-                          }),
-                ),
+                const SizedBox(height: 32),
+                const Text('Ingredients',
+                style: TextStyle(fontSize: 18),),
                 ingredientsInputs(),
                 TextButton(
                   onPressed: () {
@@ -122,7 +114,21 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                   },
                   child: const Text('Add Ingredient'),
                 ),
-                const SizedBox(height: 18),
+                Row(
+                  children: [
+                    const Text('Alcoholic', style: TextStyle(fontSize: 16),),
+                    Checkbox(
+                      value: isAlcoholic,
+                      onChanged: (bool? value) => {
+                        setState(() {
+                          isAlcoholic = !isAlcoholic;
+                        },
+                        )
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
                 TextField(
                   obscureText: false,
                   decoration: const InputDecoration(
@@ -133,11 +139,16 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                   onChanged: (value) => {imageUrl = value},
                 ),
                 const SizedBox(height: 18),
-                ElevatedButton(
-                  onPressed: () {
-                    submit();
-                  },
-                  child: const Text('Confirm'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        submit();
+                      },
+                      child: const Text('Confirm'),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 12),
               ],
