@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   List<Ingredient> ingredients = [];
   List<String> languages = [];
   List<String> categories = [];
+  List<String> glasses = [];
   final TextEditingController textController = TextEditingController();
 
   @override
@@ -69,7 +70,6 @@ class _HomePageState extends State<HomePage> {
                   onChanged: (value) => {
                     setState(() {
                       _filterDrinks(filter: textController.text);
-                      //filteredCocktails = _filterList(cocktails, search);
                       //fetch();
                     })
                   },
@@ -170,7 +170,7 @@ class _HomePageState extends State<HomePage> {
       final Response propertiesResponse = await _api.getAllDrinkProperties();
       _checkResponse(propertiesResponse);
 
-      print(propertiesResponse.data);
+      //print(propertiesResponse.data);
       // Fill ingredients list
       for (Map<String, dynamic> e in propertiesResponse.data['ingredient']) {
         ingredients.add(Ingredient.fromJson(e));
@@ -179,6 +179,16 @@ class _HomePageState extends State<HomePage> {
       for (Map<String, dynamic> e in propertiesResponse.data['category']) {
         categories.add(e['name']);
       }
+
+      for (Map<String, dynamic> e in propertiesResponse.data['glass']!) {
+        glasses.add(e['name']);
+      }
+
+      for (Map<String, dynamic> e in propertiesResponse.data['languages']!) {
+        languages.add(e['language']);
+      }
+
+      _filterDrinks(filter: 'a');
     } on Exception catch (e) {
       _showError(e.toString());
       for (dynamic e in await _api.loadDrinkMockup()) {
@@ -193,6 +203,14 @@ class _HomePageState extends State<HomePage> {
 
       for (Map<String, dynamic> e in drinkProps['category']!) {
         categories.add(e['name']);
+      }
+
+      for (Map<String, dynamic> e in drinkProps['glass']!) {
+        glasses.add(e['name']);
+      }
+
+      for (Map<String, dynamic> e in drinkProps['languages']!) {
+        languages.add(e['language']);
       }
     }
 
@@ -285,7 +303,7 @@ class _HomePageState extends State<HomePage> {
   // Filters drinks by name
   void _filterDrinks({String filter = ''}) {
     setState(() {
-      if (filter.isEmpty) {
+      if (filter.trim().isEmpty) {
         filteredDrinks = drinks;
       } else {
         filteredDrinks = drinks
@@ -293,7 +311,8 @@ class _HomePageState extends State<HomePage> {
                 element.name.toLowerCase().contains(filter.toLowerCase()))
             .toList();
       }
-    });
+    },
+    );
   }
 
   // Opens the dialog used to add a new drink
@@ -316,7 +335,7 @@ class _HomePageState extends State<HomePage> {
   // Adds a new drink to the list and send a post request to API
   void addDrink(DrinkModel drink) async {
     try {
-      print(drink.toJson());
+      //print(drink.toJson());
       final Response resp = await _api.addDrink(drink);
       _checkResponse(resp);
     } on Exception catch (e) {

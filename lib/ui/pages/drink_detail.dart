@@ -1,11 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/models/drink_model.dart';
 import 'package:cocktails/ui/components/favorite_button.dart';
 import 'package:flutter/material.dart';
 
 class DrinkDetail extends StatelessWidget {
-  const DrinkDetail(this.entity, {super.key});
+  const DrinkDetail(this.drink, {super.key});
 
-  final DrinkModel entity;
+  final DrinkModel drink;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class DrinkDetail extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Details"),
         centerTitle: true,
-        actions: [FavoriteButton(entity)],
+        actions: [FavoriteButton(drink)],
       ),
       body: SingleChildScrollView(
         child: IntrinsicHeight(
@@ -32,15 +33,17 @@ class DrinkDetail extends StatelessWidget {
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(12),
-                              child: entity.imageUrl.isNotEmpty
-                                  ? Image.network(entity.imageUrl)
-                                  : const Image(
-                                      image:
-                                          AssetImage('assets/drink-icon.png'),
-                                    ),
+                              child: CachedNetworkImage(
+                                imageUrl: drink.imageUrl,
+                                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                    CircularProgressIndicator(value: downloadProgress.progress),
+                                errorWidget: (context, url, error) => const Image(
+                                  image: AssetImage('assets/drink-icon.png'),
+                                ),
+                              ),
                             ),
                             Text(
-                              entity.name,
+                              drink.name,
                               style: const TextStyle(
                                   fontSize: 32, fontWeight: FontWeight.bold),
                             ),
@@ -60,7 +63,7 @@ class DrinkDetail extends StatelessWidget {
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                         Text(
-                          entity.category,
+                          drink.category,
                           style: const TextStyle(
                               fontWeight: FontWeight.normal, fontSize: 16),
                         ),
@@ -72,7 +75,7 @@ class DrinkDetail extends StatelessWidget {
                     'Ingredients',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                  IngredientsListing(entity.ingredients),
+                  IngredientsListing(drink.ingredients),
                   const SizedBox(
                     height: 14,
                   ),
@@ -80,9 +83,9 @@ class DrinkDetail extends StatelessWidget {
                     'Instructions',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                  entity.instructions.isNotEmpty
+                  drink.instructions.isNotEmpty
                       ? Text(
-                          entity.instructions[0].text,
+                          drink.instructions[0].text,
                           style: const TextStyle(fontSize: 16),
                         )
                       : const Text('Instructions missing'),

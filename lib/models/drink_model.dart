@@ -30,16 +30,16 @@ class DrinkModel {
       name: json['name'],
       instructions: json['instructions'] is List
           ? (json['instructions'] as List)
-              .map((e) => Instruction.fromJson(e))
-              .toList()
+          .map((e) => Instruction.fromJson(e))
+          .toList()
           : [],
       category: json['category'],
       //isAlcoholic: json['strAlcoholic'] == 'Alcoholic' ? true : false,
       isAlcoholic: json['alcoholic'],
       ingredients: json['ingredients'] is List
           ? (json['ingredients'] as List)
-              .map((e) => Ingredient.fromJson(e))
-              .toList()
+          .map((e) => Ingredient.fromJson(e))
+          .toList()
           : [],
       imageUrl: json['url_thumb'],
       isFavorite: getFavorite(json['id']),
@@ -51,7 +51,9 @@ class DrinkModel {
       id: int.parse(json['idDrink']),
       //modifyDate = DateTime.parse(json['dateModified'] ?? '2000-01-01 00:00:00'),
       name: json['strDrink'],
-      instructions: [Instruction(language:'eng', text:json['strInstructions'])],
+      instructions: [
+        Instruction(language: 'eng', text: json['strInstructions'])
+      ],
       category: json['strCategory'],
       isAlcoholic: json['strAlcoholic'] == 'Alcoholic' ? true : false,
       ingredients: [],
@@ -60,12 +62,13 @@ class DrinkModel {
     );
   }
 
-  String toJson() => jsonEncode({
+  String toJson() =>
+      jsonEncode({
         'name': name,
         'alternate_name': name,
         'alcoholic': isAlcoholic,
-        'glass': '',
-        'category': '',
+        'glass': 'Cocktail glass',
+        'category': category,
         'url_thumb': imageUrl,
         'image_attribution': '',
         'image_source': '',
@@ -91,20 +94,22 @@ class Instruction {
     );
   }
 
-  Map<String, String> toMap() => {
-    'language': language,
-    'text': text,
-  };
+  Map<String, String> toMap() =>
+      {
+        'language': language,
+        'text': text,
+      };
 
-  String toJson() => jsonEncode({
+  String toJson() =>
+      jsonEncode({
         'language': language,
         'text': text,
       });
 }
 
 class Ingredient {
-  late final String name;
-  late final String measure;
+  late String name;
+  late String measure;
 
   Ingredient({required this.name, required this.measure});
 
@@ -115,12 +120,14 @@ class Ingredient {
     );
   }
 
-  Map<String, String> toMap() => {
-    'name': name,
-    'measure': measure,
-  };
+  Map<String, String> toMap() =>
+      {
+        'name': name,
+        'measure': measure,
+      };
 
-  String toJson() => jsonEncode({
+  String toJson() =>
+      jsonEncode({
         'name': name,
         'measure': measure,
       });

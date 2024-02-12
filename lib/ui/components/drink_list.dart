@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 class DrinkList extends StatefulWidget {
   const DrinkList({
-    Key? key,
+    super.key,
     required this.drinks,
     required this.onBack,
-  }) : super(key: key);
+  });
 
   final List<DrinkModel> drinks;
   final void Function(int id) onBack;

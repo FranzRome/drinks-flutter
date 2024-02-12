@@ -11,10 +11,10 @@ class CustomTile extends StatelessWidget {
   final void Function(int id) onBack;
 
   const CustomTile({
-    Key? key,
+    super.key,
     required this.drink,
     required this.onBack,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
