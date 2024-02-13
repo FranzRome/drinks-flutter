@@ -208,7 +208,7 @@ class _HomePageState extends State<HomePage> {
       _filterDrinks(filter: 'a');
     } on Exception catch (e) {
       _showError(e.toString());
-      print('Loading mock');
+      //print('Loading mock');
 
       for (dynamic e in await _api.loadDrinkMock()) {
         drinks.add(DrinkModel.fromJsonMock(e));

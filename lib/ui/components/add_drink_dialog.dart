@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddDrinkDialog extends StatefulWidget {
-  final AddFunction addFunction;
+  final Function(DrinkModel model) addFunction;
   final List<Ingredient> availableIngredients;
   final List<String> availableCategories;
   final CameraDescription camera;
@@ -382,4 +382,4 @@ class SquareClip extends CustomClipper<Path> {
   bool shouldReclip(covariant CustomClipper oldClipper) => false;
 }
 
-typedef AddFunction = void Function(DrinkModel cocktail);
+//typedef AddFunction = void Function(DrinkModel cocktail);
