@@ -8,7 +8,9 @@ import 'package:flutter/services.dart';
 void main() async {
   await Hive.initFlutter();
   await Hive.openBox('favorites');
+
   WidgetsFlutterBinding.ensureInitialized();
+  // Camera init
   final cameras = await availableCameras();
   final firstCamera = cameras.first;
   runApp(
@@ -29,11 +31,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
+      //Force device orientation to portrait
       DeviceOrientation.portraitUp,
-      //DeviceOrientation.portraitDown,
     ]);
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Drinks',
       theme: ThemeData(
         appBarTheme: const AppBarTheme(color: MyTheme.primary),
         scaffoldBackgroundColor: MyTheme.background,
