@@ -38,8 +38,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   initState() {
-    initFirebase();
-    fetch();
+    _initFirebase();
+    _fetch();
     super.initState();
   }
 
@@ -141,13 +141,14 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _openDialog(context),
+        onPressed: () => _openAddDialog(context),
         tooltip: 'Add Cocktail',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
+  // Function called on returning back from detail page
   void onBack(int id) {
     int index = filteredDrinks.indexWhere((element) => element.id == id);
     setState(() {
@@ -158,14 +159,14 @@ class _HomePageState extends State<HomePage> {
     //print('${drinks[index].name} ${drinks[index].isFavorite}');
   }
 
-  void initFirebase() async {
+  void _initFirebase() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
 
   // Makes an API call and fill drinks list
-  void fetch() async {
+  void _fetch() async {
     // Make an API call to get all drinks
     try {
       final Response response = await _api.getAllDrinks();
@@ -252,6 +253,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // Shows a dialog containing the error message
   void _showError(String message) {
     showDialog(
       context: context,
@@ -331,7 +333,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   // Opens the dialog used to add a new drink
-  Future<void> _openDialog(BuildContext context) {
+  Future<void> _openAddDialog(BuildContext context) {
     return showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
