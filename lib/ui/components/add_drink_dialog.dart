@@ -120,18 +120,20 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                   child: TextButton(
                     onPressed: () {
                       setState(() {
-                        ingredients.add(
-                          Ingredient(
-                              name: widget.availableIngredients[0].name,
-                              measure: ''),
-                        );
-                        ingredientMeasureControllers
-                            .add(TextEditingController());
+                        if(ingredients.length < 10) {
+                          ingredients.add(
+                            Ingredient(
+                                name: widget.availableIngredients[0].name,
+                                measure: ''),
+                          );
+                          ingredientMeasureControllers
+                              .add(TextEditingController());
+                        }
                       });
                     },
-                    child: const Text(
+                    child: Text(
                       'Add Ingredient',
-                      style: TextStyle(color: MyTheme.primary),
+                      style: ingredients.length < 10 ? TextStyle(color: MyTheme.primary) : TextStyle(color: MyTheme.grey),
                     ),
                   ),
                 ),
@@ -245,16 +247,19 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
       children: List.generate(
         ingredients.length,
         (index) => Padding(
-          padding: const EdgeInsets.only(top: 5),
+          padding: const EdgeInsets.only(top: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
-                '${index + 1}.',
-                style: const TextStyle(fontSize: 18),
+              SizedBox(
+                width: 30,
+                child: Text(
+                  '${index + 1}.',
+                  style: const TextStyle(fontSize: 18),
+                ),
               ),
-              const SizedBox(width: 5),
+              const SizedBox(width: 8),
               DropdownMenu<String>(
                 hintText: 'Name',
                 initialSelection: ingredients[index].name,
