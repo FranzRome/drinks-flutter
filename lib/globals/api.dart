@@ -10,7 +10,7 @@ class Api {
   Api() {
     final connectionOptions = BaseOptions(
       baseUrl: 'http://192.168.178.36:8080/',
-      connectTimeout: const Duration(seconds: 5),
+      connectTimeout: const Duration(seconds: 3),
       receiveTimeout: const Duration(seconds: 3),
     );
 
@@ -30,15 +30,15 @@ class Api {
     return resp;
   }
 
-  Future<List<dynamic>> loadDrinkMockup() async {
+  Future<List<dynamic>> loadDrinkMock() async {
     List<dynamic> result = json.decode(
         await rootBundle.loadString('assets/json/drinks.json'))['drinks'];
 
     return result;
   }
 
-  Future<Map<String, List<dynamic>>> loadDrinkPropertiesMockup() async {
-    Map<String, List<dynamic>> result = json.decode(
+  Future<Map<String, dynamic>> loadDrinkPropertiesMock() async {
+    Map<String, dynamic> result = json.decode(
         await rootBundle.loadString('assets/json/properties.json'));
 
     return result;

@@ -1,17 +1,25 @@
+import 'package:camera/camera.dart';
 import 'package:cocktails/globals/api.dart';
 import 'package:cocktails/globals/my_theme.dart';
 import 'package:cocktails/models/drink_model.dart';
 import 'package:cocktails/ui/components/add_drink_dialog.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+import '../../firebase_options.dart';
 import '../../globals/local_data.dart';
 import '../components/custom_tile.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.title});
-
   final String title;
+  final CameraDescription camera;
+
+  const HomePage({
+    super.key,
+    required this.title,
+    required this.camera,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -30,8 +38,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   initState() {
-    super.initState();
+    initFirebase();
     fetch();
+    super.initState();
   }
 
   @override
@@ -41,93 +50,94 @@ class _HomePageState extends State<HomePage> {
         title: Text(widget.title),
         centerTitle: true,
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-              child: Material(
-                elevation: 4,
-                // Search bar
-                child: TextField(
-                  controller: textController,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    labelText: 'Search',
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.close),
-                      style: ElevatedButton.styleFrom(
-                        splashFactory: NoSplash.splashFactory,
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  12,
+                  12,
+                  12,
+                  0,
+                ),
+                child: Material(
+                  elevation: 4,
+                  // Search bar
+                  child: TextField(
+                    controller: textController,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      fillColor: MyTheme.background,
+                      labelText: 'Search',
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.close),
+                        style: ElevatedButton.styleFrom(
+                          splashFactory: NoSplash.splashFactory,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            textController.clear();
+                            _filterDrinks(filter: textController.text);
+                          });
+                        },
                       ),
-                      onPressed: () {
-                        setState(() {
-                          textController.clear();
-                          _filterDrinks(filter: textController.text);
-                        });
-                      },
                     ),
+                    onChanged: (value) => {
+                      setState(() {
+                        _filterDrinks(filter: textController.text);
+                        //fetch();
+                      })
+                    },
+                    //controller: TextEditingController(text: search),
                   ),
-                  onChanged: (value) => {
-                    setState(() {
-                      _filterDrinks(filter: textController.text);
-                      //fetch();
-                    })
-                  },
-                  //controller: TextEditingController(text: search),
                 ),
               ),
-            ),
-            /*Text('Drinks count:${cocktails.length}  '
-                'Search:$search'),*/
-            /*DrinkList(
-              drinks: drinks,
-              onBack: (int i) {},
-            ),*/
-
-            // Drinks list
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
-                    child: /*widget.drinks.isEmpty
-                    ? const Center(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 38),
-                          child: Text(
-                            'The list is empty\nPress the button to add a new drink',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      )
-                    :*/
-                        Column(
-                      children: filteredDrinks
-                          .map(
-                            (drink) => CustomTile(
-                              drink: drink,
-                              onBack: (id) {
-                                onBack(drink.id);
-                              },
+              // Drinks list
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                      padding:
+                          const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
+                      child: /*widget.drinks.isEmpty
+                      ? const Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 38),
+                            child: Text(
+                              'The list is empty\nPress the button to add a new drink',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                             ),
-                          )
-                          .toList(),
-                    )
-                    //   ListView.builder(
-                    // itemCount: filteredDrinks.length,
-                    // itemBuilder: (context, index) {
-                    //   DrinkEntity drink = filteredDrinks[index];
-                    //   return CustomTile(
-                    //       drink: drink,
-                    //       onBack: (id) {
-                    //         onBack(drink.id);
-                    //       });
-                    //}
-                    ),
+                          ),
+                        )
+                      :*/
+                          Column(
+                        children: filteredDrinks
+                            .map(
+                              (drink) => CustomTile(
+                                drink: drink,
+                                onBack: (id) {
+                                  onBack(drink.id);
+                                },
+                              ),
+                            )
+                            .toList(),
+                      )
+                      //   ListView.builder(
+                      // itemCount: filteredDrinks.length,
+                      // itemBuilder: (context, index) {
+                      //   DrinkEntity drink = filteredDrinks[index];
+                      //   return CustomTile(
+                      //       drink: drink,
+                      //       onBack: (id) {
+                      //         onBack(drink.id);
+                      //       });
+                      //}
+                      ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -146,6 +156,12 @@ class _HomePageState extends State<HomePage> {
       _filterDrinks();*/
     });
     //print('${drinks[index].name} ${drinks[index].isFavorite}');
+  }
+
+  void initFirebase() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
   }
 
   // Makes an API call and fill drinks list
@@ -191,11 +207,13 @@ class _HomePageState extends State<HomePage> {
       _filterDrinks(filter: 'a');
     } on Exception catch (e) {
       _showError(e.toString());
-      for (dynamic e in await _api.loadDrinkMockup()) {
-        drinks.add(DrinkModel.fromJsonMockup(e));
+      print('Loading mock');
+
+      for (dynamic e in await _api.loadDrinkMock()) {
+        drinks.add(DrinkModel.fromJsonMock(e));
       }
 
-      Map<String, List<dynamic>> drinkProps = await _api.loadDrinkPropertiesMockup();
+      Map<String, dynamic> drinkProps = await _api.loadDrinkPropertiesMock();
 
       for (Map<String, dynamic> e in drinkProps['ingredient']!) {
         ingredients.add(Ingredient.fromJson(e));
@@ -302,17 +320,14 @@ class _HomePageState extends State<HomePage> {
 
   // Filters drinks by name
   void _filterDrinks({String filter = ''}) {
-    setState(() {
-      if (filter.trim().isEmpty) {
-        filteredDrinks = drinks;
-      } else {
-        filteredDrinks = drinks
-            .where((element) =>
-                element.name.toLowerCase().contains(filter.toLowerCase()))
-            .toList();
-      }
-    },
-    );
+    if (filter.trim().isEmpty) {
+      filteredDrinks = drinks;
+    } else {
+      filteredDrinks = drinks
+          .where((element) =>
+              element.name.toLowerCase().contains(filter.toLowerCase()))
+          .toList();
+    }
   }
 
   // Opens the dialog used to add a new drink
@@ -321,12 +336,14 @@ class _HomePageState extends State<HomePage> {
       context: context,
       showDragHandle: true,
       isScrollControlled: true,
-      backgroundColor: MyTheme.background,
+      useSafeArea: true,
+      backgroundColor: MyTheme.primaryLight,
       builder: (BuildContext context) {
         return AddDrinkDialog(
           addFunction: addDrink,
           availableIngredients: ingredients,
           availableCategories: categories,
+          camera: widget.camera,
         );
       },
     );

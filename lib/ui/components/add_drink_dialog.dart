@@ -1,16 +1,23 @@
+import 'dart:io';
+
+import 'package:camera/camera.dart';
 import 'package:cocktails/models/drink_model.dart';
+import 'package:cocktails/ui/pages/take_picture_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddDrinkDialog extends StatefulWidget {
   final AddFunction addFunction;
   final List<Ingredient> availableIngredients;
   final List<String> availableCategories;
+  final CameraDescription camera;
 
   const AddDrinkDialog({
     super.key,
     required this.addFunction,
     required this.availableIngredients,
     required this.availableCategories,
+    required this.camera,
   });
 
   @override
@@ -23,6 +30,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
   bool isAlcoholic = true;
   List<Instruction> instructions = [Instruction(language: 'eng', text: '')];
   List<Ingredient> ingredients = [Ingredient(name: '', measure: '')];
+  late XFile? _image = XFile('');
 
   //late List<String> ingredientsName;
   String imageUrl = '';
@@ -98,37 +106,97 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                   onChanged: (value) => {},
                 ),
                 const SizedBox(height: 32),
-                const Text('Ingredients',
-                style: TextStyle(fontSize: 18),),
+                const Text(
+                  'Ingredients:',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
                 ingredientsInputs(),
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      ingredients.add(
-                        Ingredient(
-                            name: widget.availableIngredients[0].name,
-                            measure: ''),
-                      );
-                      ingredientMeasureControllers.add(TextEditingController());
-                    });
-                  },
-                  child: const Text('Add Ingredient'),
+                const SizedBox(height: 12),
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      setState(() {
+                        ingredients.add(
+                          Ingredient(
+                              name: widget.availableIngredients[0].name,
+                              measure: ''),
+                        );
+                        ingredientMeasureControllers
+                            .add(TextEditingController());
+                      });
+                    },
+                    child: const Text('Add Ingredient'),
+                  ),
                 ),
                 Row(
                   children: [
-                    const Text('Alcoholic', style: TextStyle(fontSize: 16),),
+                    const Text(
+                      'Alcoholic',
+                      style: TextStyle(fontSize: 16),
+                    ),
                     Checkbox(
                       value: isAlcoholic,
                       onChanged: (bool? value) => {
-                        setState(() {
-                          isAlcoholic = !isAlcoholic;
-                        },
+                        setState(
+                          () {
+                            isAlcoholic = !isAlcoholic;
+                          },
                         )
                       },
                     ),
                   ],
                 ),
                 const SizedBox(height: 24),
+                const Text(
+                  'Image:',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+                //const SizedBox(height: 12),
+                _image!.path.isNotEmpty
+                    ?
+                  ClipPath(
+                    clipper: SquareClip(),
+                    child: Image.file(
+                      File(_image!.path),
+                    ),
+                  )
+                    : const SizedBox(
+                        width: 0,
+                        height: 0,
+                      ),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                TakePictureScreen(camera: widget.camera),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                          'Take a picture'), /*const Icon(Icons.camera_alt),*/
+                    ),
+                    const SizedBox(width: 12),
+                    TextButton(
+                      onPressed: () {
+                        openGallery();
+                      },
+                      child: const Text(
+                          'Open gallery'), /*const Icon(Icons.camera_alt),*/
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
                 TextField(
                   obscureText: false,
                   decoration: const InputDecoration(
@@ -227,6 +295,17 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
     );
   }
 
+  void openGallery() async {
+    final ImagePicker picker = ImagePicker();
+    XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      setState(() {
+        _image = image;
+      });
+    }
+  }
+
   void submit() {
     if (name.isEmpty || instructionsTextController.text.isEmpty) {
       _showError(context);
@@ -289,6 +368,18 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
       },
     );
   }
+}
+
+class SquareClip extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path p = Path();
+    p.addRect(const Offset(0, 150) & const Size(360, 360));
+    return p;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper oldClipper) => false;
 }
 
 typedef AddFunction = void Function(DrinkModel cocktail);

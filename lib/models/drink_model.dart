@@ -46,7 +46,7 @@ class DrinkModel {
     );
   }
 
-  static DrinkModel fromJsonMockup(Map<String, dynamic> json) {
+  static DrinkModel fromJsonMock(Map<String, dynamic> json) {
     return DrinkModel(
       id: int.parse(json['idDrink']),
       //modifyDate = DateTime.parse(json['dateModified'] ?? '2000-01-01 00:00:00'),
