@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                                 drink: drink,
                                 onBack: (id) {
                                   onBack(drink.id);
-                                },
+                                }
                               ),
                             )
                             .toList(),

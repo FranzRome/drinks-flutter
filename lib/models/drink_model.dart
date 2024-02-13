@@ -38,7 +38,7 @@ class DrinkModel {
       isAlcoholic: json['alcoholic'],
       ingredients: json['ingredients'] is List
           ? (json['ingredients'] as List)
-          .map((e) => Ingredient.fromJson(e))
+          .map((e) => Ingredient.fromDrinkJson(e))
           .toList()
           : [],
       imageUrl: json['url_thumb'],
@@ -117,6 +117,13 @@ class Ingredient {
     return Ingredient(
       name: json['name'],
       measure: '',
+    );
+  }
+
+  factory Ingredient.fromDrinkJson(Map<String, dynamic> json) {
+    return Ingredient(
+      name: json['name'],
+      measure: json['measure'],
     );
   }
 

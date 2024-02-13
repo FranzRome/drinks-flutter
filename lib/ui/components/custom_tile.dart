@@ -18,48 +18,50 @@ class CustomTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-      child: ListTile(
-        style: ListTileStyle.drawer,
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: CachedNetworkImage(
-            imageUrl: drink.imageUrl,
-            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                CircularProgressIndicator(value: downloadProgress.progress),
-            errorWidget: (context, url, error) => const Image(
-              image: AssetImage('assets/drink-icon.png'),
+    return Column(
+      children: [
+        ListTile(
+          style: ListTileStyle.drawer,
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: CachedNetworkImage(
+              imageUrl: drink.imageUrl,
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  CircularProgressIndicator(value: downloadProgress.progress),
+              errorWidget: (context, url, error) => const Image(
+                image: AssetImage('assets/drink-icon.png'),
+              ),
             ),
           ),
-        ),
-        title: Text(
-          drink.name,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        subtitle: Text(
-          drink.category,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.normal,
-            color: MyTheme.lightText,
+          title: Text(
+            drink.name,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-        ),
-        trailing: FavoriteButton(drink),
-        onTap: () {
-          Navigator.of(context)
-              .push(
-            MaterialPageRoute(
-              builder: (context) => DrinkDetail(drink),
+          subtitle: Text(
+            drink.category,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.normal,
+              color: MyTheme.lightText,
             ),
-          )
-              .then(
-            (_) {
-              onBack(drink.id);
-            },
-          );
-        },
-      ),
+          ),
+          trailing: FavoriteButton(drink),
+          onTap: () {
+            Navigator.of(context)
+                .push(
+              MaterialPageRoute(
+                builder: (context) => DrinkDetail(drink),
+              ),
+            )
+                .then(
+              (_) {
+                onBack(drink.id);
+              },
+            );
+          },
+        ),
+        const Divider(height: 0),
+      ],
     );
   }
 }

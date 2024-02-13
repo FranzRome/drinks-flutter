@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:cocktails/globals/my_theme.dart';
 import 'package:cocktails/models/drink_model.dart';
 import 'package:cocktails/ui/pages/take_picture_screen.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
   @override
   void initState() {
     selectedCategory = widget.availableCategories.first;
-    ingredients[0].name = widget.availableIngredients[0].name;
+    ingredients.first.name = widget.availableIngredients.first.name;
     //ingredientsName = [widget.availableIngredients[0].name];
     //selectedIngredientName = widget.availableIngredients.first.name;
     super.initState();
@@ -138,6 +139,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                       style: TextStyle(fontSize: 16),
                     ),
                     Checkbox(
+                      checkColor: MyTheme.primaryLight,
                       value: isAlcoholic,
                       onChanged: (bool? value) => {
                         setState(
