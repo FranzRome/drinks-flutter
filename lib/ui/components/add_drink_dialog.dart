@@ -129,7 +129,10 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                             .add(TextEditingController());
                       });
                     },
-                    child: const Text('Add Ingredient'),
+                    child: const Text(
+                      'Add Ingredient',
+                      style: TextStyle(color: MyTheme.primary),
+                    ),
                   ),
                 ),
                 Row(
@@ -139,6 +142,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                       style: TextStyle(fontSize: 16),
                     ),
                     Checkbox(
+                      activeColor: MyTheme.primary,
                       checkColor: MyTheme.primaryLight,
                       value: isAlcoholic,
                       onChanged: (bool? value) => {
@@ -161,13 +165,12 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                 ),
                 //const SizedBox(height: 12),
                 _image!.path.isNotEmpty
-                    ?
-                  ClipPath(
-                    clipper: SquareClip(),
-                    child: Image.file(
-                      File(_image!.path),
-                    ),
-                  )
+                    ? ClipPath(
+                        clipper: SquareClip(),
+                        child: Image.file(
+                          File(_image!.path),
+                        ),
+                      )
                     : const SizedBox(
                         width: 0,
                         height: 0,
@@ -185,7 +188,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                           ),
                         );
                       },
-                      child: const Text(
+                      child: const PrimaryText(
                           'Take a picture'), /*const Icon(Icons.camera_alt),*/
                     ),
                     const SizedBox(width: 12),
@@ -193,7 +196,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                       onPressed: () {
                         openGallery();
                       },
-                      child: const Text(
+                      child: const PrimaryText(
                           'Open gallery'), /*const Icon(Icons.camera_alt),*/
                     ),
                   ],
@@ -213,10 +216,18 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            return MyTheme.chalkWhite;
+                          },
+                        ),
+                      ),
                       onPressed: () {
                         submit();
                       },
-                      child: const Text('Confirm'),
+                      child: const PrimaryText('Confirm'),
                     ),
                   ],
                 ),
@@ -368,6 +379,22 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
           ],
         );
       },
+    );
+  }
+}
+
+class PrimaryText extends StatelessWidget {
+  final String text;
+
+  const PrimaryText(this.text, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: const TextStyle(
+        color: MyTheme.primary,
+      ),
     );
   }
 }
