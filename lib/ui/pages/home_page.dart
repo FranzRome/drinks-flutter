@@ -14,11 +14,17 @@ import '../components/custom_tile.dart';
 class HomePage extends StatefulWidget {
   final String title;
   final CameraDescription camera;
+  final List<DrinkModel> drinks;
+  final List<String> categories;
+  final List<Ingredient> ingredients;
 
   const HomePage({
     super.key,
     required this.title,
     required this.camera,
+    required this.drinks,
+    required this.categories,
+    required this.ingredients,
   });
 
   @override
@@ -28,123 +34,112 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   //final GlobalKey<DrinkListState> _mKey = GlobalKey();
   final Api _api = Api();
-  List<DrinkModel> drinks = [];
   List<DrinkModel> filteredDrinks = [];
-  List<Ingredient> ingredients = [];
-  List<String> languages = [];
-  List<String> categories = [];
-  List<String> glasses = [];
   final TextEditingController textController = TextEditingController();
+  final PageController controller = PageController();
 
   @override
   initState() {
     _initFirebase();
-    _fetch();
+    setState(() {
+      _filterDrinks(filter: 'a');
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  12,
-                  12,
-                  12,
-                  0,
-                ),
-                child: Material(
-                  elevation: 4,
-                  // Search bar
-                  child: TextField(
-                    controller: textController,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      fillColor: MyTheme.background,
-                      labelText: 'Search',
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.close),
-                        style: ElevatedButton.styleFrom(
-                          splashFactory: NoSplash.splashFactory,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            textController.clear();
-                            _filterDrinks(filter: textController.text);
-                          });
-                        },
-                      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              12,
+              12,
+              12,
+              0,
+            ),
+            child: Material(
+              elevation: 4,
+              // Search bar
+              child: TextField(
+                controller: textController,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  fillColor: MyTheme.background,
+                  labelText: 'Search',
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.close),
+                    style: ElevatedButton.styleFrom(
+                      splashFactory: NoSplash.splashFactory,
                     ),
-                    onChanged: (value) => {
+                    onPressed: () {
                       setState(() {
+                        textController.clear();
                         _filterDrinks(filter: textController.text);
-                        //fetch();
-                      })
+                      });
                     },
-                    //controller: TextEditingController(text: search),
                   ),
                 ),
+                onChanged: (value) => {
+                  setState(() {
+                    _filterDrinks(filter: textController.text);
+                    //fetch();
+                  })
+                },
+                //controller: TextEditingController(text: search),
               ),
-              // Drinks list
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
-                      child: /*widget.drinks.isEmpty
-                      ? const Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 38),
-                            child: Text(
-                              'The list is empty\nPress the button to add a new drink',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        )
-                      :*/
-                          Column(
-                        children: filteredDrinks
-                            .map(
-                              (drink) => CustomTile(
-                                drink: drink,
-                                onBack: (id) {
-                                  onBack(drink.id);
-                                }
-                              ),
-                            )
-                            .toList(),
-                      )
-                      //   ListView.builder(
-                      // itemCount: filteredDrinks.length,
-                      // itemBuilder: (context, index) {
-                      //   DrinkEntity drink = filteredDrinks[index];
-                      //   return CustomTile(
-                      //       drink: drink,
-                      //       onBack: (id) {
-                      //         onBack(drink.id);
-                      //       });
-                      //}
-                      ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          // Drinks list
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
+                  child: /*widget.drinks.isEmpty
+                  ? const Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 38),
+                        child: Text(
+                          'The list is empty\nPress the button to add a new drink',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    )
+                  :*/
+                      Column(
+                    children: filteredDrinks
+                        .map(
+                          (drink) => CustomTile(
+                              drink: drink,
+                              onBack: (id) {
+                                onBack(drink.id);
+                              }),
+                        )
+                        .toList(),
+                  )
+                  //   ListView.builder(
+                  // itemCount: filteredDrinks.length,
+                  // itemBuilder: (context, index) {
+                  //   DrinkEntity drink = filteredDrinks[index];
+                  //   return CustomTile(
+                  //       drink: drink,
+                  //       onBack: (id) {
+                  //         onBack(drink.id);
+                  //       });
+                  //}
+                  ),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openAddDialog(context),
         tooltip: 'Add Cocktail',
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 
@@ -152,7 +147,7 @@ class _HomePageState extends State<HomePage> {
   void onBack(int id) {
     int index = filteredDrinks.indexWhere((element) => element.id == id);
     setState(() {
-      drinks[index].isFavorite = getFavorite(id);
+      widget.drinks[index].isFavorite = getFavorite(id);
       /*textController.clear();
       _filterDrinks();*/
     });
@@ -166,18 +161,18 @@ class _HomePageState extends State<HomePage> {
   }
 
   // Makes an API call and fill drinks list
-  void _fetch() async {
+  /*void _fetch() async {
     // Make an API call to get all drinks
     try {
       final Response response = await _api.getAllDrinks();
       _checkResponse(response);
 
-      drinks.clear();
+      widget.drinks.clear();
       // Fill drinks list
       for (Map<String, dynamic> e in response.data) {
         if (e['name'] != null && e['name'].toString().isNotEmpty) {
           //result.add(await DrinkEntity.fromJsonApi(e));
-          drinks.add(
+          widget.drinks.add(
             DrinkModel.fromJsonApi(e),
           );
         }
@@ -214,7 +209,7 @@ class _HomePageState extends State<HomePage> {
       //print('Loading mock');
 
       for (dynamic e in await _api.loadDrinkMock()) {
-        drinks.add(DrinkModel.fromJsonMock(e));
+        widget.drinks.add(DrinkModel.fromJsonMock(e));
       }
 
       Map<String, dynamic> drinkProps = await _api.loadDrinkPropertiesMock();
@@ -323,14 +318,14 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
-  }
+  }*/
 
   // Filters drinks by name
   void _filterDrinks({String filter = ''}) {
     if (filter.trim().isEmpty) {
-      filteredDrinks = drinks;
+      filteredDrinks = widget.drinks;
     } else {
-      filteredDrinks = drinks
+      filteredDrinks = widget.drinks
           .where((element) =>
               element.name.toLowerCase().contains(filter.toLowerCase()))
           .toList();
@@ -348,8 +343,8 @@ class _HomePageState extends State<HomePage> {
       builder: (BuildContext context) {
         return AddDrinkDialog(
           addFunction: addDrink,
-          availableIngredients: ingredients,
-          availableCategories: categories,
+          availableIngredients: widget.ingredients,
+          availableCategories: widget.categories,
           camera: widget.camera,
         );
       },
@@ -361,13 +356,13 @@ class _HomePageState extends State<HomePage> {
     try {
       //print(drink.toJson());
       final Response resp = await _api.addDrink(drink);
-      _checkResponse(resp);
+      //_checkResponse(resp);
     } on Exception catch (e) {
-      _showError(e.toString());
+      //_showError(e.toString());
     } finally {
       setState(
         () {
-          drinks.add(drink);
+          widget.drinks.add(drink);
         },
       );
     }

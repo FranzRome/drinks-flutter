@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 
 class Api {
-  late Dio _dio;
+  late final Dio _dio;
 
   Api() {
     final connectionOptions = BaseOptions(
