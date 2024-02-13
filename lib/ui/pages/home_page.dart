@@ -206,6 +206,9 @@ class _HomePageState extends State<HomePage> {
       }
 
       _filterDrinks(filter: 'a');
+
+      // Build UI after fetching data
+      setState(() {});
     } on Exception catch (e) {
       _showError(e.toString());
       //print('Loading mock');
@@ -234,6 +237,8 @@ class _HomePageState extends State<HomePage> {
     }
 
     _filterDrinks(filter: 'a');
+    // Build UI after fetching data
+    setState(() {});
   }
 
   // Checks a response status code and eventually shows an error
