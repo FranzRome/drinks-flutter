@@ -222,7 +222,7 @@ class _AddDrinkDialogState extends State<AddDrinkDialog> {
                         backgroundColor:
                             MaterialStateProperty.resolveWith<Color?>(
                           (Set<MaterialState> states) {
-                            return MyTheme.chalkWhite;
+                            return MyTheme.mintCream;
                           },
                         ),
                       ),

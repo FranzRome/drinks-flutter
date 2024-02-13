@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cocktails/globals/my_theme.dart';
 import 'package:cocktails/models/drink_model.dart';
 import 'package:cocktails/ui/components/favorite_button.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class DrinkDetail extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(16),
                     child: Container(
-                      decoration: const BoxDecoration(color: Color(0xFFC5C5C5)),
+                      decoration: const BoxDecoration(color: MyTheme.primaryLight),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
