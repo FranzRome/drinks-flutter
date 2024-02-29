@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "91057957585",
+    "project_id": "drinks-flutter",
+    "storage_bucket": "drinks-flutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91057957585:android:b1419d0249cd2fd99033f0",
+        "android_client_info": {
+          "package_name": "com.example.cocktails"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8rLwprcNx47CmnABWqF9ExLrRqurTd7g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
